@@ -1,7 +1,5 @@
 package com.example.mytransactoins.domain.di
 
-import com.example.mytransactoins.domain.interactor.login.LoginInteractor
-import com.example.mytransactoins.domain.interactor.login.LoginInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.EmailInteractor
 import com.example.mytransactoins.domain.interactor.register.EmailInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.EmailVerificationInteractor
@@ -20,9 +18,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 interface InteractorModule {
-    @Binds
-    fun bindLoginInteractor(loginInteractorImpl: LoginInteractorImpl): LoginInteractor
-
 
     @Binds
     fun bindEmailInteractor(emailInteractorImpl: EmailInteractorImpl): EmailInteractor
