@@ -2,8 +2,9 @@ package com.example.mytransactoins.domain.interactor.register
 
 import android.util.Patterns
 import com.example.mytransactoins.domain.model.Result
+import javax.inject.Inject
 
-class EmailInteractorImpl : EmailInteractor {
+class EmailInteractorImpl @Inject constructor() : EmailInteractor {
     override fun validateEmail(email: String): Result {
         if (email.isBlank()) {
             return Result(isSuccess = false, message = "email is empty")
