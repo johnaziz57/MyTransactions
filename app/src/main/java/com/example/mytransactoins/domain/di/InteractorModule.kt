@@ -4,12 +4,12 @@ import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.EmailInteractor
 import com.example.mytransactoins.domain.interactor.register.EmailInteractorImpl
+import com.example.mytransactoins.domain.interactor.register.EmailVerificationInteractor
+import com.example.mytransactoins.domain.interactor.register.EmailVerificationInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.PasswordInteractor
 import com.example.mytransactoins.domain.interactor.register.PasswordInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractorImpl
-import com.example.mytransactoins.domain.interactor.register.VerificationCodeInteractor
-import com.example.mytransactoins.domain.interactor.register.VerificationCodeInteractorImpl
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractor
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractorImpl
 import dagger.Binds
@@ -35,7 +35,7 @@ interface InteractorModule {
 
 
     @Binds
-    fun bindVerificationInteractor(verificationCodeInteractorImpl: VerificationCodeInteractorImpl): VerificationCodeInteractor
+    fun bindVerificationInteractor(verificationCodeInteractorImpl: EmailVerificationInteractorImpl): EmailVerificationInteractor
 
     @Binds
     fun bindTransactionInteractor(transactionInteractorImpl: TransactionInteractorImpl): TransactionInteractor
