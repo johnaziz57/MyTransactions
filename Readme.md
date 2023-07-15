@@ -2,9 +2,9 @@
 
 - [x] Navigation
 - [] Unify Result class
+- [] Entry fragment
 - [] Testing domain
 - [] Encryption
 - [] Room
-- [] Entry fragment
 - [] Navigation testing
 - [] Nested Navigation

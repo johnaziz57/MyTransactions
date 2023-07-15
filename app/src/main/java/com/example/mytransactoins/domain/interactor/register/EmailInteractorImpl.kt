@@ -7,13 +7,13 @@ import javax.inject.Inject
 class EmailInteractorImpl @Inject constructor() : EmailInteractor {
     override fun validateEmail(email: String): Result {
         if (email.isBlank()) {
-            return Result(isSuccess = false, message = "email is empty")
+            return Result(isSuccessful = false, message = "email is empty")
         }
 
         if (Patterns.EMAIL_ADDRESS.matcher(email).matches().not()) {
-            return Result(isSuccess = false, message = "email is invalid")
+            return Result(isSuccessful = false, message = "email is invalid")
         }
 
-        return Result(isSuccess = true)
+        return Result(isSuccessful = true)
     }
 }

@@ -32,8 +32,25 @@ class RegistrationViewModel @Inject constructor(
     private val _validateEmailVerification = MutableLiveData<Result>()
     private val _validatePassword = MutableLiveData<Result>()
 
-    private var email: String? = null
-    private var password: String? = null
+    private var email: String = ""
 
+    fun submitEmail(email: String) {
+        val result = emailInteractor.validateEmail(email)
+        _validateEmail.value = result
+        if (result.isSuccessful) {
+            this.email = email
+        }
+    }
 
+    fun submitEmailVerificationCode(code: String) {
+        _validateEmailVerification.value = emailVerificationInteractor.validateCode(code)
+    }
+
+    fun submitPassword(password: String, repeatedPassword: String) {
+        val result = passwordInteractor.validatePassword(password, repeatedPassword)
+        if (result.isSuccessful) {
+            registrationInteractor.registerUser(email, password)
+        }
+        _validatePassword.value = result
+    }
 }
