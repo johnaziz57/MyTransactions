@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import at.favre.lib.crypto.bcrypt.BCrypt
+import com.example.mytransactoins.data.util.Hasher
 import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.repo.UserRepo
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -12,7 +12,8 @@ import javax.inject.Inject
 
 class UserRepoImpl @Inject constructor(
     @ApplicationContext
-    private val context: Context
+    private val context: Context,
+    private val hasher: Hasher
 ) : UserRepo {
     // TODO add Resource class to contain the result and error if something goes wrong
     private val usersPreferences: SharedPreferences
@@ -37,9 +38,7 @@ class UserRepoImpl @Inject constructor(
     }
 
     override fun addUser(email: String, password: String) {
-        val hashedPassword =
-            BCrypt.with(BCrypt.Version.VERSION_2Y).hash(BCRYPT_COST, password.toByteArray(charset))
-        usersPreferences.edit().putString(email, hashedPassword.toString(charset)).apply()
+        usersPreferences.edit().putString(email, hasher.hash(password)).apply()
     }
 
     // TODO change return type to User
@@ -51,10 +50,8 @@ class UserRepoImpl @Inject constructor(
     override fun logIn(email: String, password: String): Result {
         val savedHashedPassword = usersPreferences.getString(email, null)
             ?: return Result(false, "User doesn't exists")
-        val result = BCrypt.verifyer()
-            .verify(password.toByteArray(charset), savedHashedPassword.toByteArray(charset))
 
-        if (result.verified.not()) {
+        if (hasher.verify(password, savedHashedPassword).not()) {
             return Result(false, "Password is incorrect")
         }
 
@@ -71,10 +68,5 @@ class UserRepoImpl @Inject constructor(
         private const val CURRENT_USER_PREFERENCES = "CURRENT_USER_PREFERENCES"
 
         private const val CURRENT_USER = "CURRENT_USER"
-
-        // TODO find the best cost for BCrypt
-        private const val BCRYPT_COST = 10
-
-        private val charset = Charsets.UTF_8
     }
 }
