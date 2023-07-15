@@ -5,6 +5,7 @@ import javax.inject.Inject
 
 class Hasher @Inject constructor() {
     fun hash(value: String): String {
+        //TODO replace BCrypt with Argon2Kt
         return BCrypt.with(BCrypt.Version.VERSION_2Y).hash(
             BCRYPT_COST, value.toByteArray(DEFAULT_CHARSET)
         ).toString(DEFAULT_CHARSET)
