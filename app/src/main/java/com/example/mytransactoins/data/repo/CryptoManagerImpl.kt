@@ -20,11 +20,13 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
 
     override fun encrypt(bytes: ByteArray): ByteArray {
         val encryptCipher = getEncryptCipher()
-        return encryptCipher.doFinal(bytes)
+        val encryptedData = encryptCipher.doFinal(bytes)
+        return encryptCipher.iv + encryptedData
     }
 
     override fun decrypt(bytes: ByteArray): ByteArray {
-        TODO("Not yet implemented")
+        val iv = bytes.sliceArray(0 until IV_SIZE)
+        return getDecryptCipher(iv).doFinal(bytes.sliceArray(IV_SIZE until bytes.size))
     }
 
     /**
@@ -97,5 +99,7 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
         // PKCS7 will turn it into `DD DD DD DD 04 04 04 04`.
         private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
         private const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING"
+
+        private const val IV_SIZE = 16
     }
 }
