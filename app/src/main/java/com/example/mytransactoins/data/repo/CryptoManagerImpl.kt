@@ -19,6 +19,7 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
     }
 
     override fun encrypt(bytes: ByteArray): ByteArray {
+        // TODO check best practices for either creating a cipher every time or reuse the old one
         val encryptCipher = getEncryptCipher()
         val encryptedData = encryptCipher.doFinal(bytes)
         return encryptCipher.iv + encryptedData
