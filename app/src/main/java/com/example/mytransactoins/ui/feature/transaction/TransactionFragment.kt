@@ -5,5 +5,5 @@ import com.example.mytransactoins.databinding.FragmentTransactionBinding
 import com.example.mytransactoins.ui.utils.viewBinding
 
 class TransactionFragment : Fragment() {
-    val binding by viewBinding(FragmentTransactionBinding::bind)
+    private val binding by viewBinding(FragmentTransactionBinding::bind)
 }
