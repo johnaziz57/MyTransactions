@@ -1,28 +1,35 @@
 package com.example.mytransactoins.data.util
 
-import at.favre.lib.crypto.bcrypt.BCrypt
+import com.lambdapioneer.argon2kt.Argon2Kt
+import com.lambdapioneer.argon2kt.Argon2Mode
+import java.security.SecureRandom
 import javax.inject.Inject
 
 class Hasher @Inject constructor() {
-    fun hash(value: String): String {
-        //TODO replace BCrypt with Argon2Kt
-        return BCrypt.with(BCrypt.Version.VERSION_2Y).hash(
-            BCRYPT_COST, value.toByteArray(DEFAULT_CHARSET)
-        ).toString(DEFAULT_CHARSET)
+
+    private val argon2Kt = Argon2Kt()
+    private val secureRandom = SecureRandom()
+
+    fun hash(password: String): String {
+        val salt = ByteArray(16)
+        secureRandom.nextBytes(salt)
+        return argon2Kt.hash(
+            mode = Argon2Mode.ARGON2_I,
+            password = password.toByteArray(DEFAULT_CHARSET),
+            salt = salt,
+        ).encodedOutputAsString()
     }
 
     fun verify(value: String, hash: String): Boolean {
-        return BCrypt.verifyer()
-            .verify(
-                value.toByteArray(DEFAULT_CHARSET),
-                hash.toByteArray(DEFAULT_CHARSET)
-            ).verified
+        return argon2Kt.verify(
+            mode = Argon2Mode.ARGON2_I,
+            encoded = hash,
+            password = value.toByteArray(DEFAULT_CHARSET)
+        )
+
     }
 
     companion object {
         private val DEFAULT_CHARSET = Charsets.UTF_8
-
-        // TODO find the best cost for BCrypt
-        private const val BCRYPT_COST = 10
     }
 }
