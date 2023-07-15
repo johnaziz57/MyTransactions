@@ -13,8 +13,8 @@
             android:id="@+id/action_entryFragment_to_registrationActivity"
             app:destination="@id/registrationActivity" />
         <action
-            android:id="@+id/action_entryFragment_to_transactionActivity2"
-            app:destination="@id/transactionActivity2" />
+            android:id="@+id/action_entryFragment_to_transactionActivity"
+            app:destination="@id/transactionActivity" />
     </fragment>
 
     <activity
@@ -24,7 +24,7 @@
         tools:layout="@layout/activity_registration" />
 
     <activity
-        android:id="@+id/transactionActivity2"
+        android:id="@+id/transactionActivity"
         android:name="com.example.mytransactoins.ui.feature.transaction.TransactionActivity"
         android:label="activity_transaction"
         tools:layout="@layout/activity_transaction" />
