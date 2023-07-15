@@ -8,7 +8,7 @@ class EmailVerificationInteractorImpl @Inject constructor() : EmailVerificationI
         if (code.length != 4) {
             return Result(false, "Code is too short")
         }
-        if (!code.contains("ok")) {
+        if (!code.contains("0")) {
             return Result(false, "Code is not correct")
         }
         return Result(true)
