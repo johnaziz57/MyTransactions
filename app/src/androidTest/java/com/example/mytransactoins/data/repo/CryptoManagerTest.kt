@@ -8,10 +8,10 @@ internal class CryptoManagerTest {
     @Test
     fun testCryptoManagerEncryptAndDecryptSuccessfully() {
         fun testEncryptionDecryption(message: String) {
-            val cryptoManagerImpl = CryptoManagerImpl()
+            val cryptoManager = CryptoManager()
             val input = message.toByteArray()
-            val encryptedMessage = cryptoManagerImpl.encrypt(input)
-            val decryptedMessage = cryptoManagerImpl.decrypt(encryptedMessage)
+            val encryptedMessage = cryptoManager.encrypt(input)
+            val decryptedMessage = cryptoManager.decrypt(encryptedMessage)
             assert(input.contentEquals(decryptedMessage))
         }
 

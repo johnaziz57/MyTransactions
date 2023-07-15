@@ -3,7 +3,6 @@ package com.example.mytransactoins.data.repo
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import com.example.mytransactoins.domain.repo.CryptoManager
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -11,21 +10,21 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.inject.Inject
 
-class CryptoManagerImpl @Inject constructor() : CryptoManager {
+class CryptoManager @Inject constructor() {
     // KeyStore.getInstance gets the indicated keystore out of the list of available keystores
     // Since this is Android the available keystore is `AndroidKeySore`
     private val keyStore = KeyStore.getInstance("AndroidKeystore").apply {
         load(null)
     }
 
-    override fun encrypt(bytes: ByteArray): ByteArray {
+    fun encrypt(bytes: ByteArray): ByteArray {
         // TODO check best practices for either creating a cipher every time or reuse the old one
         val encryptCipher = getEncryptCipher()
         val encryptedData = encryptCipher.doFinal(bytes)
         return encryptCipher.iv + encryptedData
     }
 
-    override fun decrypt(bytes: ByteArray): ByteArray {
+    fun decrypt(bytes: ByteArray): ByteArray {
         val iv = bytes.sliceArray(0 until IV_SIZE)
         return getDecryptCipher(iv).doFinal(bytes.sliceArray(IV_SIZE until bytes.size))
     }
