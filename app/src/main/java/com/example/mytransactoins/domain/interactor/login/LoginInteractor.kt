@@ -1,12 +1,12 @@
 package com.example.mytransactoins.domain.interactor.login
 
-import com.example.mytransactoins.domain.model.User
+import com.example.mytransactoins.domain.model.Result
 
 interface LoginInteractor {
 
     val isLoggedIn: Boolean
 
-    fun login(username: String, password: String): Result<User>
+    fun login(email: String, password: String): Result
 
     fun logout()
 }

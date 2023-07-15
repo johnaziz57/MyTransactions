@@ -7,6 +7,6 @@ class EntryInteractorImpl @Inject constructor(
     private val userRepo: UserRepo
 ) : EntryInteractor {
     override fun isLoggedIn(): Boolean {
-        return userRepo.isLoggedIn()
+        return userRepo.getCurrentUser() != null
     }
 }

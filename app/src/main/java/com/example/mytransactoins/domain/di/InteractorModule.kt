@@ -1,8 +1,9 @@
 package com.example.mytransactoins.domain.di
 
-import com.example.mytransactoins.data.repo.CryptoManagerImpl
 import com.example.mytransactoins.domain.interactor.entry.EntryInteractor
 import com.example.mytransactoins.domain.interactor.entry.EntryInteractorImpl
+import com.example.mytransactoins.domain.interactor.login.LoginInteractor
+import com.example.mytransactoins.domain.interactor.login.LoginInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.EmailInteractor
 import com.example.mytransactoins.domain.interactor.register.EmailInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.EmailVerificationInteractor
@@ -13,7 +14,6 @@ import com.example.mytransactoins.domain.interactor.register.RegistrationInterac
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractorImpl
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractor
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractorImpl
-import com.example.mytransactoins.domain.repo.CryptoManager
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,6 +25,9 @@ interface InteractorModule {
 
     @Binds
     fun bindEntryInteractor(entryInteractorImpl: EntryInteractorImpl): EntryInteractor
+
+    @Binds
+    fun bindLoginInteractor(loginInteractorImpl: LoginInteractorImpl): LoginInteractor
 
     @Binds
     fun bindEmailInteractor(emailInteractorImpl: EmailInteractorImpl): EmailInteractor
