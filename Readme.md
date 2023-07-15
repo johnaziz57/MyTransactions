@@ -1,6 +1,7 @@
 ## TODO
 
-- [] Navigation
+- [x] Navigation
+- [] Unify Result class
 - [] Testing domain
 - [] Encryption
 - [] Room
