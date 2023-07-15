@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/emailFragment">
 
@@ -24,12 +25,14 @@
         android:id="@+id/passwordFragment"
         android:name="com.example.mytransactoins.ui.feature.registration.password.PasswordFragment"
         android:label="PasswordFragment">
+        <!--TODO REMOVE this activity from the stack-->
         <action
-            android:id="@+id/action_passwordFragment_to_transactionFragment"
-            app:destination="@id/transactionFragment" />
+            android:id="@+id/action_passwordFragment_to_transactionActivity"
+            app:destination="@id/transactionActivity" />
     </fragment>
-    <fragment
-        android:id="@+id/transactionFragment"
-        android:name="com.example.mytransactoins.ui.feature.transaction.TransactionFragment"
-        android:label="TransactionFragment" />
+    <activity
+        android:id="@+id/transactionActivity"
+        android:name="com.example.mytransactoins.ui.feature.transaction.TransactionActivity"
+        android:label="activity_transaction"
+        tools:layout="@layout/activity_transaction" />
 </navigation>

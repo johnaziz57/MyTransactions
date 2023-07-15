@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/entry"
+    app:startDestination="@id/entryFragment">
+
+    <fragment
+        android:id="@+id/entryFragment"
+        android:name="com.example.mytransactoins.ui.feature.entry.EntryFragment"
+        android:label="EntryFragment">
+        <action
+            android:id="@+id/action_entryFragment_to_registrationActivity"
+            app:destination="@id/registrationActivity" />
+        <action
+            android:id="@+id/action_entryFragment_to_transactionActivity2"
+            app:destination="@id/transactionActivity2" />
+    </fragment>
+
+    <activity
+        android:id="@+id/registrationActivity"
+        android:name="com.example.mytransactoins.ui.feature.registration.RegistrationActivity"
+        android:label="activity_registration"
+        tools:layout="@layout/activity_registration" />
+
+    <activity
+        android:id="@+id/transactionActivity2"
+        android:name="com.example.mytransactoins.ui.feature.transaction.TransactionActivity"
+        android:label="activity_transaction"
+        tools:layout="@layout/activity_transaction" />
+</navigation>
