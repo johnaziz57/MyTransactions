@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.mytransactoins.R
 import com.example.mytransactoins.databinding.FragmentPasswordBinding
 import com.example.mytransactoins.ui.feature.registration.RegistrationViewModel
+import com.example.mytransactoins.ui.utils.navigateToNewTaskActivity
 import com.example.mytransactoins.ui.utils.viewBinding
 
 class PasswordFragment : Fragment(R.layout.fragment_password) {
@@ -23,6 +25,8 @@ class PasswordFragment : Fragment(R.layout.fragment_password) {
             viewModel.validatePasswordLiveData.observe(viewLifecycleOwner) {
                 if (!it.isSuccessful) {
                     editTextPassword.error = it.message
+                } else {
+                    findNavController().navigateToNewTaskActivity(PasswordFragmentDirections.actionPasswordFragmentToTransactionActivity())
                 }
             }
         }
