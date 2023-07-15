@@ -1,8 +1,10 @@
 package com.example.mytransactoins.ui.feature.entry
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.ActivityNavigator
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.mytransactoins.R
@@ -26,23 +28,18 @@ class EntryFragment : Fragment(R.layout.fragment_entry) {
         val navOptions = NavOptions.Builder()
             .setPopUpTo(R.id.entryFragment, true)
             .build()
+        val extras = ActivityNavigator.Extras.Builder()
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .build()
 
         findNavController().navigate(
-            R.id.action_entryFragment_to_transactionActivity,
-            null,
-            navOptions
+            EntryFragmentDirections.actionEntryFragmentToTransactionActivity(),
+            extras
         )
     }
 
     private fun navigateToRegistration() {
-        val navOptions = NavOptions.Builder()
-            .setPopUpTo(R.id.entryFragment, true)
-            .build()
-
-        findNavController().navigate(
-            R.id.action_entryFragment_to_registrationActivity,
-            null,
-            navOptions
-        )
+        findNavController().navigate(EntryFragmentDirections.actionEntryFragmentToRegistrationActivity())
     }
 }
