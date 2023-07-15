@@ -4,14 +4,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import com.example.mytransactoins.domain.model.User
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.repo.UserRepo
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class UserRepoImpl @Inject constructor(
     @ApplicationContext
-    private val context: Context
+    private val context: Context,
+    private val cryptoManager: CryptoManager
 ) : UserRepo {
     // TODO add Resource class to contain the result and error if something goes wrong
     private val usersPreferences: SharedPreferences
@@ -35,31 +36,39 @@ class UserRepoImpl @Inject constructor(
         )
     }
 
-    override fun getUser(email: String): User? {
-        val password = usersPreferences.getString(email, null) ?: return null
-        return User(email, password)
-    }
-
     override fun addUser(email: String, password: String) {
-        usersPreferences.edit().putString(email, password).apply()
+        val encryptedPassword = cryptoManager.encrypt(password.toByteArray()).toString()
+        usersPreferences.edit().putString(email, encryptedPassword).apply()
     }
 
-    override fun isLoggedIn(): Boolean {
-        return currentUserPreferences.getBoolean(IS_LOGGED_IN_KEY, false)
+    // TODO change return type to User
+    override fun getCurrentUser(): String? {
+        return currentUserPreferences.getString(CURRENT_USER, null)
     }
 
-    override fun logIn(email: String, password: String) {
-        currentUserPreferences.edit().putBoolean(IS_LOGGED_IN_KEY, true).apply()
+    // TODO change return type to Result<User>
+    override fun logIn(email: String, password: String): Result {
+        val savedEncryptedPassword = usersPreferences.getString(email, null)
+            ?: return Result(false, "User doesn't exists")
+
+        val encryptedPassword = cryptoManager.encrypt(password.toByteArray()).toString()
+
+        if (encryptedPassword != savedEncryptedPassword) {
+            return Result(false, "Password is incorrect")
+        }
+
+        currentUserPreferences.edit().putString(CURRENT_USER, email).apply()
+        return Result(true)
     }
 
     override fun logOut() {
-        currentUserPreferences.edit().putBoolean(IS_LOGGED_IN_KEY, false).apply()
+        currentUserPreferences.edit().putString(CURRENT_USER, null).apply()
     }
 
     companion object {
         private const val USERS_PREFERENCES = "USERS_PREFERENCES"
         private const val CURRENT_USER_PREFERENCES = "CURRENT_USER_PREFERENCES"
 
-        private const val IS_LOGGED_IN_KEY = "IS_LOGGED_IN"
+        private const val CURRENT_USER = "CURRENT_USER"
     }
 }

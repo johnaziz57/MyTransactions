@@ -6,8 +6,7 @@ import com.example.mytransactoins.domain.repo.UserRepo
 import javax.inject.Inject
 
 class LoginInteractorImpl @Inject constructor(
-    private val userRepo: UserRepo,
-    private val cryptoManager: CryptoManager
+    private val userRepo: UserRepo
 ) : LoginInteractor {
     private var user: User? = null
 

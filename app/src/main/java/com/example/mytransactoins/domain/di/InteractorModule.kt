@@ -42,6 +42,4 @@ interface InteractorModule {
     @Binds
     fun bindTransactionInteractor(transactionInteractorImpl: TransactionInteractorImpl): TransactionInteractor
 
-    @Binds
-    fun bindCryptoManager(cryptoManagerImpl: CryptoManagerImpl): CryptoManager
 }

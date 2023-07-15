@@ -1,11 +1,10 @@
 package com.example.mytransactoins.domain.repo
 
-import com.example.mytransactoins.domain.model.User
+import com.example.mytransactoins.domain.model.Result
 
 interface UserRepo {
-    fun getUser(email: String): User?
     fun addUser(email: String, password: String)
-    fun isLoggedIn(): Boolean
-    fun logIn(email: String, password: String)
+    fun getCurrentUser(): String?
+    fun logIn(email: String, password: String): Result
     fun logOut()
 }
