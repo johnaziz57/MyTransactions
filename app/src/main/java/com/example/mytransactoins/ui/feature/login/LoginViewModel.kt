@@ -48,7 +48,7 @@ class LoginViewModel @Inject constructor(
                             errorMessage = "Incorrect password"
                         )
 
-                        is UserDoesNotExistException -> _password.value = LiveDataResult(
+                        is UserDoesNotExistException -> _email.value = LiveDataResult(
                             isSuccessful = false,
                             errorMessage = "User doesn't exist"
                         )
