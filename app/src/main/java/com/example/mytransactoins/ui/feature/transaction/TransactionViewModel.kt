@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractor
+import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.ui.feature.mode.UIResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,12 +16,21 @@ class TransactionViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor
 ) : ViewModel() {
 
-    val transactionListLiveData: LiveData<List<String>>
+    val transactionListLiveData: LiveData<UIResult<List<String>>>
         get() = _transactionList
 
-    private val _transactionList = MutableLiveData<List<String>>()
+    private val _transactionList = MutableLiveData<UIResult<List<String>>>()
     fun loadTransactions() {
-        _transactionList.value = transactionInteractor.getTransactions()
+        transactionInteractor.getTransactions().let {
+            _transactionList.value = when (it) {
+                is NewResult.Error -> UIResult(
+                    isSuccessful = false,
+                    errorMessage = "Something went wrong"
+                )
+
+                is NewResult.Success -> UIResult(isSuccessful = true, data = it.data)
+            }
+        }
     }
 
     fun logout() {

@@ -25,7 +25,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction) {
         }
 
         viewModel.transactionListLiveData.observe(viewLifecycleOwner) {
-            binding.textViewTransactions.text = it.toString()
+            binding.textViewTransactions.text = it.data.toString()
         }
     }
 }
