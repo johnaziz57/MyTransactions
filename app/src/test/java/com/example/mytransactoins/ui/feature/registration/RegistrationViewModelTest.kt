@@ -8,6 +8,8 @@ import com.example.mytransactoins.domain.interactor.register.RegistrationInterac
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.IncorrectCodeException
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordDoesNotHaveLettersAndDigits
+import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordIsTooShortException
+import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordsDoNotMatchException
 import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
 import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.getOrAwaitValue
@@ -112,12 +114,14 @@ class RegistrationViewModelTest {
             )
         ).thenReturn(Result.Success(Unit))
         viewModel.submitPassword("1234", "1234")
-        val value = viewModel.validatePasswordLiveData.getOrAwaitValue()
-        assert(value.isValid)
+        val valuePrimary = viewModel.primaryPasswordLiveData.getOrAwaitValue()
+        val valueSecondary = viewModel.secondaryPasswordLiveData.getOrAwaitValue()
+        assert(valuePrimary.isSuccessful)
+        assert(valueSecondary.isSuccessful)
     }
 
     @Test
-    fun `test submit invalid password`() {
+    fun `test submit weak password`() {
         `when`(
             validateRegisterPasswordInteractor.validatePassword(
                 anyString(),
@@ -125,8 +129,34 @@ class RegistrationViewModelTest {
             )
         ).thenReturn(Result.Error(PasswordDoesNotHaveLettersAndDigits()))
         viewModel.submitPassword("1234", "1")
-        val value = viewModel.validatePasswordLiveData.getOrAwaitValue()
-        assertFalse(value.isValid)
+        val value = viewModel.primaryPasswordLiveData.getOrAwaitValue()
+        assertFalse(value.isSuccessful)
+    }
+
+    @Test
+    fun `test submit short password`() {
+        `when`(
+            validateRegisterPasswordInteractor.validatePassword(
+                anyString(),
+                anyString()
+            )
+        ).thenReturn(Result.Error(PasswordIsTooShortException()))
+        viewModel.submitPassword("1234", "1")
+        val value = viewModel.primaryPasswordLiveData.getOrAwaitValue()
+        assertFalse(value.isSuccessful)
+    }
+
+    @Test
+    fun `test submit unmatching passwords`() {
+        `when`(
+            validateRegisterPasswordInteractor.validatePassword(
+                anyString(),
+                anyString()
+            )
+        ).thenReturn(Result.Error(PasswordsDoNotMatchException()))
+        viewModel.submitPassword("1234", "1")
+        val value = viewModel.secondaryPasswordLiveData.getOrAwaitValue()
+        assertFalse(value.isSuccessful)
     }
 
 }

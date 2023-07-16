@@ -13,11 +13,11 @@ import com.example.mytransactoins.domain.interactor.register.email_verification.
 import com.example.mytransactoins.domain.interactor.register.email_verification.IncorrectCodeException
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordDoesNotHaveLettersAndDigits
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordIsTooShortException
+import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordValidationException
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordsDoNotMatchException
 import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
 import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.mode.LiveDataResult
-import com.example.mytransactoins.ui.feature.registration.password.PasswordFormState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -31,17 +31,22 @@ class RegistrationViewModel @Inject constructor(
 ) : ViewModel() {
     val validateEmailLiveData: LiveData<LiveDataResult<Unit>>
         get() = _validateEmail
-
     val validateEmailVerificationLiveData: LiveData<LiveDataResult<Unit>>
         get() = _validateEmailVerification
+    val primaryPasswordLiveData: LiveData<LiveDataResult<Unit>>
+        get() = _primaryPassword
+    val secondaryPasswordLiveData: LiveData<LiveDataResult<Unit>>
+        get() = _secondaryPassword
 
-    val validatePasswordLiveData: LiveData<PasswordFormState>
-        get() = _validatePassword
+    val loginLiveData: LiveData<LiveDataResult<Unit>>
+        get() = _login
 
 
     private val _validateEmail = MutableLiveData<LiveDataResult<Unit>>()
     private val _validateEmailVerification = MutableLiveData<LiveDataResult<Unit>>()
-    private val _validatePassword = MutableLiveData<PasswordFormState>()
+    private val _primaryPassword = MutableLiveData<LiveDataResult<Unit>>()
+    private val _secondaryPassword = MutableLiveData<LiveDataResult<Unit>>()
+    private val _login = MutableLiveData<LiveDataResult<Unit>>()
 
     private var email: String = ""
 
@@ -95,20 +100,47 @@ class RegistrationViewModel @Inject constructor(
         when (val result =
             validateRegisterPasswordInteractor.validatePassword(password, repeatedPassword)) {
             is Result.Success -> {
-                _validatePassword.value = PasswordFormState()
+                _primaryPassword.value = LiveDataResult(isSuccessful = true)
+                _secondaryPassword.value = LiveDataResult(isSuccessful = true)
                 registrationInteractor.registerUser(email, password).let {
                     if (it is Result.Success) {
-                        loginInteractor.login(email, password)
+                        login(email, password)
                     }
                 }
             }
 
             is Result.Error -> {
-                _validatePassword.value = when (result.error) {
-                    is PasswordDoesNotHaveLettersAndDigits -> PasswordFormState(primaryPasswordError = "Password doesn't have both letters and digits")
-                    is PasswordIsTooShortException -> PasswordFormState(primaryPasswordError = "Password is too short")
-                    is PasswordsDoNotMatchException -> PasswordFormState(secondaryPasswordError = "Passwords don't match")
-                }
+                handlePasswordError(result.error)
+            }
+        }
+    }
+
+    private fun login(email: String, password: String) {
+        loginInteractor.login(email, password).let {
+            when (it) {
+                is Result.Success -> _login.value = LiveDataResult(isSuccessful = true)
+                else -> {}
+            }
+        }
+    }
+
+    private fun handlePasswordError(passwordValidationException: PasswordValidationException) {
+        when (passwordValidationException) {
+            is PasswordDoesNotHaveLettersAndDigits -> {
+                _primaryPassword.value = LiveDataResult(
+                    isSuccessful = false,
+                    errorMessage = "Password doesn't have both letters and digits"
+                )
+            }
+
+            is PasswordIsTooShortException -> {
+                _primaryPassword.value =
+                    LiveDataResult(isSuccessful = false, errorMessage = "Password is too short")
+            }
+
+            is PasswordsDoNotMatchException -> {
+                _secondaryPassword.value =
+                    LiveDataResult(isSuccessful = false, errorMessage = "Passwords don't match")
             }
         }
     }

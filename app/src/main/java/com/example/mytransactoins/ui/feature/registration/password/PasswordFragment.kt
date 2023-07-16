@@ -22,13 +22,16 @@ class PasswordFragment : Fragment(R.layout.fragment_password) {
                     editTextSecondaryPassword.text.toString()
                 )
             }
-            viewModel.validatePasswordLiveData.observe(viewLifecycleOwner) {
-                if (it.isValid) {
-                    findNavController().navigateToNewTaskActivity(PasswordFragmentDirections.actionPasswordFragmentToTransactionActivity())
-                } else {
-                    editTextPrimaryPassword.error = it.primaryPasswordError
-                    editTextSecondaryPassword.error = it.secondaryPasswordError
-                }
+            viewModel.primaryPasswordLiveData.observe(viewLifecycleOwner) {
+                editTextPrimaryPassword.error = it.errorMessage
+            }
+            viewModel.secondaryPasswordLiveData.observe(viewLifecycleOwner) {
+                editTextSecondaryPassword.error = it.errorMessage
+            }
+            viewModel.loginLiveData.observe(viewLifecycleOwner) {
+                if (it.isSuccessful.not()) return@observe
+
+                findNavController().navigateToNewTaskActivity(PasswordFragmentDirections.actionPasswordFragmentToTransactionActivity())
             }
         }
     }
