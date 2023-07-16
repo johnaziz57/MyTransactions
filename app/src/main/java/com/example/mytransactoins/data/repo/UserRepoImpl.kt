@@ -20,7 +20,7 @@ class UserRepoImpl @Inject constructor(
     private val context: Context,
     private val hasher: Hasher
 ) : UserRepo {
-    // TODO add Resource class to contain the result and error if something goes wrong
+
     private val usersPreferences: SharedPreferences
     private val currentUserPreferences: SharedPreferences
 
@@ -52,7 +52,6 @@ class UserRepoImpl @Inject constructor(
         return User(email)
     }
 
-    // TODO change return type to Result<User>
     override fun logIn(email: String, password: String): Result<User, LoginException> {
         val savedHashedPassword = usersPreferences.getString(email, null)
             ?: return Result.Error(UserDoesNotExistException())

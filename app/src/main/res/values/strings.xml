@@ -10,8 +10,6 @@
     <string name="register">Register</string>
     <string name="password_hint">Password</string>
     <string name="email_hint">john@email.com</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="confirm">Confirm</string>
     <string name="repeat_password">Repeat password</string>
     <string name="verification_code_hint">1234</string>

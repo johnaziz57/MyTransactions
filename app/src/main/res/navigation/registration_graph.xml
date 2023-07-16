@@ -25,7 +25,6 @@
         android:id="@+id/passwordFragment"
         android:name="com.example.mytransactoins.ui.feature.registration.password.PasswordFragment"
         android:label="PasswordFragment">
-        <!--TODO REMOVE registration activity from the stack-->
         <action
             android:id="@+id/action_passwordFragment_to_transactionActivity"
             app:destination="@id/transactionActivity"
