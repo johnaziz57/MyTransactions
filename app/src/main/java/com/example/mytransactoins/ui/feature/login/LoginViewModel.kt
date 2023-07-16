@@ -17,23 +17,23 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginInteractor: LoginInteractor,
 ) : ViewModel() {
-    val loginFormStateLiveData: LiveData<LoginFormState>
-        get() = _loginFormState
+    val emailLiveData: LiveData<LiveDataResult<Unit>>
+        get() = _email
+    val passwordLiveData: LiveData<LiveDataResult<Unit>>
+        get() = _password
     val loginResultLiveData: LiveData<LiveDataResult<Unit>>
         get() = _loginResult
 
-    private val _loginFormState = MutableLiveData<LoginFormState>()
+    private val _email = MutableLiveData<LiveDataResult<Unit>>()
+    private val _password = MutableLiveData<LiveDataResult<Unit>>()
     private val _loginResult = MutableLiveData<LiveDataResult<Unit>>()
 
     fun login(email: String, password: String) {
-        val emailError = validateEmail(email)
-        val passwordError = validatePassword(password)
-        val isValidInput = emailError == null && passwordError == null
+        _email.value = validateEmail(email)
+        _password.value = validatePassword(password)
+        val isValidInput =
+            _email.value?.isSuccessful ?: false && _password.value?.isSuccessful ?: false
 
-        _loginFormState.value = LoginFormState(
-            emailError = emailError,
-            passwordError = passwordError
-        )
         if (isValidInput) {
             when (val result = loginInteractor.login(email, password)) {
                 is Result.Success -> {
@@ -42,44 +42,53 @@ class LoginViewModel @Inject constructor(
 
                 is Result.Error -> {
                     _loginResult.value = LiveDataResult(isSuccessful = false)
-                    _loginFormState.value = when (result.error) {
-                        is IncorrectCredentialsException -> LoginFormState(passwordError = "Incorrect password")
-                        is UserDoesNotExistException -> LoginFormState(emailError = "User doesn't exist")
+                    when (result.error) {
+                        is IncorrectCredentialsException -> _password.value = LiveDataResult(
+                            isSuccessful = false,
+                            errorMessage = "Incorrect password"
+                        )
+
+                        is UserDoesNotExistException -> _password.value = LiveDataResult(
+                            isSuccessful = false,
+                            errorMessage = "User doesn't exist"
+                        )
                     }
                 }
             }
         }
     }
 
-    private fun validateEmail(email: String): String? {
-        when (val result = loginInteractor.validateEmail(email)) {
+    private fun validateEmail(email: String): LiveDataResult<Unit> {
+        return when (val result = loginInteractor.validateEmail(email)) {
             is Result.Success -> {
-                return null
+                LiveDataResult(isSuccessful = true)
             }
 
             is Result.Error -> {
-                return when (result.error) {
-                    is BlankEmailException -> {
-                        "Blank email"
-                    }
+                when (result.error) {
+                    is BlankEmailException -> LiveDataResult(
+                        isSuccessful = false,
+                        errorMessage = "Empty email"
+                    )
 
-                    is InvalidEmailException -> {
-                        "Invalid email format"
-                    }
+                    is InvalidEmailException -> LiveDataResult(
+                        isSuccessful = false,
+                        errorMessage = "Invalid email"
+                    )
                 }
             }
         }
     }
 
-    private fun validatePassword(password: String): String? {
+    private fun validatePassword(password: String): LiveDataResult<Unit> {
         return when (loginInteractor.validatePasswordLength(password)) {
             is Result.Success -> {
-                null
+                LiveDataResult(isSuccessful = true)
             }
 
-            is Result.Error -> {
-                "Password too short"
-            }
+            is Result.Error ->
+                LiveDataResult(isSuccessful = false, errorMessage = "Password too short")
+
         }
     }
 }

@@ -47,8 +47,8 @@ class LoginViewModelTest {
             )
         )
         viewModel.login("", "password")
-        val value = viewModel.loginFormStateLiveData.getOrAwaitValue()
-        assert(value.emailError != null)
+        val value = viewModel.emailLiveData.getOrAwaitValue()
+        assertFalse(value.isSuccessful)
     }
 
     @Test
@@ -58,8 +58,8 @@ class LoginViewModelTest {
             Result.Error(PasswordTooShortException())
         )
         viewModel.login("j@e.com", "pass")
-        val value = viewModel.loginFormStateLiveData.getOrAwaitValue()
-        assert(value.passwordError != null)
+        val value = viewModel.passwordLiveData.getOrAwaitValue()
+        assertFalse(value.isSuccessful)
     }
 
     @Test
@@ -78,9 +78,10 @@ class LoginViewModelTest {
             )
         ).thenReturn(Result.Success(User(email)))
         viewModel.login(email, "password")
-        val value = viewModel.loginFormStateLiveData.getOrAwaitValue()
-        assert(value.emailError == null)
-        assert(value.passwordError == null)
+        val emailValue = viewModel.emailLiveData.getOrAwaitValue()
+        val passwordValue = viewModel.passwordLiveData.getOrAwaitValue()
+        assert(emailValue.isSuccessful)
+        assert(passwordValue.isSuccessful)
     }
 
     @Test
