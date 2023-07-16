@@ -6,6 +6,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.example.mytransactoins.data.util.Hasher
 import com.example.mytransactoins.domain.model.Result
+import com.example.mytransactoins.domain.model.User
 import com.example.mytransactoins.domain.repo.UserRepo
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -42,8 +43,9 @@ class UserRepoImpl @Inject constructor(
     }
 
     // TODO change return type to User
-    override fun getCurrentUser(): String? {
-        return currentUserPreferences.getString(CURRENT_USER, null)
+    override fun getCurrentUser(): User? {
+        val email = currentUserPreferences.getString(CURRENT_USER, null) ?: return null
+        return User(email)
     }
 
     // TODO change return type to Result<User>
