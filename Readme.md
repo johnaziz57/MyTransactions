@@ -124,10 +124,10 @@ The list of known bugs is:
 
 ## TODO
 
-- [] Handle going back in the verification code screen
-- [] Handle autofocus on text fields
-- [] Replace SharedPreference with ProtoDataStore
-- [] Navigation testing
+- [ ] Handle going back in the verification code screen
+- [ ] Handle autofocus on text fields
+- [ ] Replace SharedPreference with ProtoDataStore
+- [ ] Navigation testing
 
 ## Done
 
