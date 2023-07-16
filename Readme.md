@@ -1,8 +1,8 @@
 ## TODO
 
-- [] Improve UI
-- [] Add Splash screen
 - [] Unify Result class
+- [] Handle autofocus on text fields
+- [] Add Splash screen
 - [] Error Handling
 - [] Handle register with previous email
 - [] Replace SharedPreference with PreferenceDataStore
@@ -24,3 +24,4 @@
   https://github.com/phxql/argon2-jvm
 - [x] Check best practices for either creating a cipher every time or reuse the old one
 - [x] Login
+- [x] Improve UI
