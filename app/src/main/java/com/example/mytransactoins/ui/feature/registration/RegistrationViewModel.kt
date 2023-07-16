@@ -55,6 +55,7 @@ class RegistrationViewModel @Inject constructor(
         when (val result = registrationEmailInteractor.validateEmail(email)) {
             is Result.Success -> {
                 _validateEmail.value = LiveDataResult(isSuccessful = true)
+                this.email = email
             }
 
             is Result.Error -> {
