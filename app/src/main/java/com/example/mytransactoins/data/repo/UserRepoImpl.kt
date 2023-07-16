@@ -52,7 +52,7 @@ class UserRepoImpl @Inject constructor(
             ?: return Result(false, "User doesn't exists")
 
         if (hasher.verify(password, savedHashedPassword).not()) {
-            return Result(false, "Password is incorrect")
+            return Result(false, "Either email or password is incorrect")
         }
 
         currentUserPreferences.edit().putString(CURRENT_USER, email).apply()

@@ -19,19 +19,15 @@ class EntryFragment : Fragment(R.layout.fragment_entry) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (viewModel.isLoggedIn()) {
-            navigateToTransactions()
+            findNavController().navigateToNewTaskActivity(EntryFragmentDirections.actionEntryFragmentToTransactionActivity())
         }
 
         binding.buttonLogin.setOnClickListener {
-            navigateToTransactions()
+            findNavController().navigate(EntryFragmentDirections.actionEntryFragmentToLoginFragment())
         }
         binding.buttonRegister.setOnClickListener {
             navigateToRegistration()
         }
-    }
-
-    private fun navigateToTransactions() {
-        findNavController().navigateToNewTaskActivity(EntryFragmentDirections.actionEntryFragmentToTransactionActivity())
     }
 
     private fun navigateToRegistration() {

@@ -1,6 +1,5 @@
 package com.example.mytransactoins.ui.feature.login
 
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,32 +9,30 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginInteractor: LoginInteractor
+    private val loginInteractor: LoginInteractor,
 ) : ViewModel() {
-    val loginFormState: LiveData<LoginFormState>
-        get() = _loginForm
+    val loginFormStateLiveData: LiveData<LoginFormState>
+        get() = _loginFormState
 
-    private val _loginForm = MutableLiveData<LoginFormState>()
+    private val _loginFormState = MutableLiveData<LoginFormState>()
 
-    fun login(username: String, password: String) {
+    fun login(email: String, password: String) {
+        val emailError = loginInteractor.validateEmail(email).message
+        val passwordError = loginInteractor.validatePasswordLength(password).message
+        val isValidInput = emailError == null && passwordError == null
 
-    }
-
-    fun loginDataChanged(username: String, password: String) {
-
-    }
-
-    // A placeholder username validation check
-    private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains("@")) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
+        _loginFormState.value = LoginFormState(
+            emailError = loginInteractor.validateEmail(email).message,
+            passwordError = loginInteractor.validatePasswordLength(password).message,
+            isValid = false
+        )
+        if (isValidInput) {
+            val result = loginInteractor.login(email, password)
+            _loginFormState.value = if (result.isSuccessful) {
+                LoginFormState(isValid = true)
+            } else {
+                LoginFormState(emailError = result.message, passwordError = result.message)
+            }
         }
-    }
-
-    // A placeholder password validation check
-    private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5
     }
 }

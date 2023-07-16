@@ -13,11 +13,10 @@
             android:id="@+id/action_entryFragment_to_registrationActivity"
             app:destination="@id/registrationActivity" />
         <action
+            android:id="@+id/action_entryFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
             android:id="@+id/action_entryFragment_to_transactionActivity"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/transactionActivity" />
     </fragment>
 
@@ -32,4 +31,13 @@
         android:name="com.example.mytransactoins.ui.feature.transaction.TransactionActivity"
         android:label="activity_transaction"
         tools:layout="@layout/activity_transaction" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.mytransactoins.ui.feature.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_transactionActivity"
+            app:destination="@id/transactionActivity" />
+    </fragment>
 </navigation>

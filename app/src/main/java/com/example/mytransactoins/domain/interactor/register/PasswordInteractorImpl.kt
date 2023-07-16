@@ -1,11 +1,12 @@
 package com.example.mytransactoins.domain.interactor.register
 
 import com.example.mytransactoins.domain.model.Result
+import com.example.mytransactoins.domain.utils.Constants
 import javax.inject.Inject
 
 class PasswordInteractorImpl @Inject constructor() : PasswordInteractor {
     override fun validatePassword(password: String, repeatedPassword: String): Result {
-        if (password.length < 6) {
+        if (password.length < Constants.PASSWORD_LENGTH) {
             return Result(isSuccessful = false, message = "Password is too short")
         }
         if (password != repeatedPassword) {
