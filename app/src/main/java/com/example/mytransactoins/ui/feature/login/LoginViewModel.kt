@@ -8,8 +8,8 @@ import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
 import com.example.mytransactoins.domain.interactor.login.IncorrectCredentialsException
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.login.UserDoesNotExistException
-import com.example.mytransactoins.domain.model.NewResult
 import com.example.mytransactoins.domain.model.Result
+import com.example.mytransactoins.ui.feature.mode.UIResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -19,11 +19,11 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
     val loginFormStateLiveData: LiveData<LoginFormState>
         get() = _loginFormState
-    val loginResultLiveData: LiveData<Result>
+    val loginResultLiveData: LiveData<UIResult<Unit>>
         get() = _loginResult
 
     private val _loginFormState = MutableLiveData<LoginFormState>()
-    private val _loginResult = MutableLiveData<Result>()
+    private val _loginResult = MutableLiveData<UIResult<Unit>>()
 
     fun login(email: String, password: String) {
         val emailError = validateEmail(email)
@@ -36,12 +36,12 @@ class LoginViewModel @Inject constructor(
         )
         if (isValidInput) {
             when (val result = loginInteractor.login(email, password)) {
-                is NewResult.Success -> {
-                    _loginResult.value = Result(isSuccessful = true)
+                is Result.Success -> {
+                    _loginResult.value = UIResult(isSuccessful = true)
                 }
 
-                is NewResult.Error -> {
-                    _loginResult.value = Result(isSuccessful = false)
+                is Result.Error -> {
+                    _loginResult.value = UIResult(isSuccessful = false)
                     _loginFormState.value = when (result.error) {
                         is IncorrectCredentialsException -> LoginFormState(passwordError = "Incorrect password")
                         is UserDoesNotExistException -> LoginFormState(emailError = "User doesn't exist")
@@ -53,11 +53,11 @@ class LoginViewModel @Inject constructor(
 
     private fun validateEmail(email: String): String? {
         when (val result = loginInteractor.validateEmail(email)) {
-            is NewResult.Success -> {
+            is Result.Success -> {
                 return null
             }
 
-            is NewResult.Error -> {
+            is Result.Error -> {
                 return when (result.error) {
                     is BlankEmailException -> {
                         "Blank email"
@@ -73,11 +73,11 @@ class LoginViewModel @Inject constructor(
 
     private fun validatePassword(password: String): String? {
         return when (loginInteractor.validatePasswordLength(password)) {
-            is NewResult.Success -> {
+            is Result.Success -> {
                 null
             }
 
-            is NewResult.Error -> {
+            is Result.Error -> {
                 "Password too short"
             }
         }

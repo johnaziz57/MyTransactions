@@ -9,7 +9,7 @@ import com.example.mytransactoins.domain.interactor.register.email_verification.
 import com.example.mytransactoins.domain.interactor.register.email_verification.IncorrectCodeException
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordDoesNotHaveLettersAndDigits
 import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.getOrAwaitValue
 import org.junit.Assert.*
 import org.junit.Before
@@ -57,7 +57,7 @@ class RegistrationViewModelTest {
 
     @Test
     fun `test submit valid email`() {
-        `when`(validateEmailInteractor.validateEmail(anyString())).thenReturn(NewResult.Success(Unit))
+        `when`(validateEmailInteractor.validateEmail(anyString())).thenReturn(Result.Success(Unit))
         viewModel.submitEmail("j@e.com")
         val value = viewModel.validateEmailLiveData.getOrAwaitValue()
         assert(value.isSuccessful)
@@ -66,7 +66,7 @@ class RegistrationViewModelTest {
     @Test
     fun `test submit invalid email`() {
         `when`(validateEmailInteractor.validateEmail(anyString())).thenReturn(
-            NewResult.Error(
+            Result.Error(
                 InvalidEmailException()
             )
         )
@@ -78,7 +78,7 @@ class RegistrationViewModelTest {
     @Test
     fun `test submit valid email verification code`() {
         `when`(emailVerificationInteractor.validateCode(anyString())).thenReturn(
-            NewResult.Success(
+            Result.Success(
                 Unit
             )
         )
@@ -90,7 +90,7 @@ class RegistrationViewModelTest {
     @Test
     fun `test submit invalid email verification code`() {
         `when`(emailVerificationInteractor.validateCode(anyString())).thenReturn(
-            NewResult.Error(IncorrectCodeException())
+            Result.Error(IncorrectCodeException())
         )
         viewModel.submitEmailVerificationCode("123")
         val value = viewModel.validateEmailVerificationLiveData.getOrAwaitValue()
@@ -104,13 +104,13 @@ class RegistrationViewModelTest {
                 anyString(),
                 anyString()
             )
-        ).thenReturn(NewResult.Success(Unit))
+        ).thenReturn(Result.Success(Unit))
         `when`(
             registrationInteractor.registerUser(
                 anyString(),
                 anyString()
             )
-        ).thenReturn(NewResult.Success(Unit))
+        ).thenReturn(Result.Success(Unit))
         viewModel.submitPassword("1234", "1234")
         val value = viewModel.validatePasswordLiveData.getOrAwaitValue()
         assert(value.isValid)
@@ -123,7 +123,7 @@ class RegistrationViewModelTest {
                 anyString(),
                 anyString()
             )
-        ).thenReturn(NewResult.Error(PasswordDoesNotHaveLettersAndDigits()))
+        ).thenReturn(Result.Error(PasswordDoesNotHaveLettersAndDigits()))
         viewModel.submitPassword("1234", "1")
         val value = viewModel.validatePasswordLiveData.getOrAwaitValue()
         assertFalse(value.isValid)

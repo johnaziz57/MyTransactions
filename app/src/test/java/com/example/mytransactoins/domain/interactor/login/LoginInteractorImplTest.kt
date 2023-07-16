@@ -2,7 +2,7 @@ package com.example.mytransactoins.domain.interactor.login
 
 import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
 import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.model.User
 import com.example.mytransactoins.domain.repo.UserRepo
 import org.junit.Assert.*
@@ -33,40 +33,40 @@ class LoginInteractorImplTest {
     fun `test validateEmail`() {
         val validEmail = "j@e.com"
         val invalidEmail = "@e."
-        `when`(validateEmailInteractor.validateEmail(validEmail)).thenReturn(NewResult.Success(Unit))
+        `when`(validateEmailInteractor.validateEmail(validEmail)).thenReturn(Result.Success(Unit))
         `when`(validateEmailInteractor.validateEmail(invalidEmail)).thenReturn(
-            NewResult.Error(
+            Result.Error(
                 InvalidEmailException()
             )
         )
 
-        assert(loginInteractor.validateEmail(validEmail) is NewResult.Success)
-        assert(loginInteractor.validateEmail(invalidEmail) is NewResult.Error)
+        assert(loginInteractor.validateEmail(validEmail) is Result.Success)
+        assert(loginInteractor.validateEmail(invalidEmail) is Result.Error)
     }
 
     @Test
     fun `test validatePasswordLength`() {
         val validPassword = "123456"
         val invalidPassword = "1"
-        assert(loginInteractor.validatePasswordLength(validPassword) is NewResult.Success)
-        assert(loginInteractor.validatePasswordLength(invalidPassword) is NewResult.Error)
+        assert(loginInteractor.validatePasswordLength(validPassword) is Result.Success)
+        assert(loginInteractor.validatePasswordLength(invalidPassword) is Result.Error)
     }
 
     @Test
     fun `test successful login`() {
         val email = "j@e.com"
-        `when`(userRepo.logIn(anyString(), anyString())).thenReturn(NewResult.Success(User(email)))
+        `when`(userRepo.logIn(anyString(), anyString())).thenReturn(Result.Success(User(email)))
         // TODO test results
-        assert(loginInteractor.login(email, "password") is NewResult.Success)
+        assert(loginInteractor.login(email, "password") is Result.Success)
     }
 
     @Test
     fun `test unsuccessful login`() {
         `when`(userRepo.logIn(anyString(), anyString())).thenReturn(
-            NewResult.Error(
+            Result.Error(
                 IncorrectCredentialsException()
             )
         )
-        assert(loginInteractor.login("j@e.com", "password") is NewResult.Error)
+        assert(loginInteractor.login("j@e.com", "password") is Result.Error)
     }
 }

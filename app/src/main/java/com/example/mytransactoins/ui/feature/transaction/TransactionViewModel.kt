@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractor
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.mode.UIResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -23,12 +23,12 @@ class TransactionViewModel @Inject constructor(
     fun loadTransactions() {
         transactionInteractor.getTransactions().let {
             _transactionList.value = when (it) {
-                is NewResult.Error -> UIResult(
+                is Result.Error -> UIResult(
                     isSuccessful = false,
                     errorMessage = "Something went wrong"
                 )
 
-                is NewResult.Success -> UIResult(isSuccessful = true, data = it.data)
+                is Result.Success -> UIResult(isSuccessful = true, data = it.data)
             }
         }
     }

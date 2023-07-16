@@ -1,7 +1,7 @@
 package com.example.mytransactoins.domain.interactor.common
 
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 
 interface ValidateEmailInteractor {
-    fun validateEmail(email: String): NewResult<Unit, ValidateEmailException>
+    fun validateEmail(email: String): Result<Unit, ValidateEmailException>
 }

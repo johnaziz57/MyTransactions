@@ -9,7 +9,7 @@ import com.example.mytransactoins.domain.interactor.login.IncorrectCredentialsEx
 import com.example.mytransactoins.domain.interactor.login.LoginException
 import com.example.mytransactoins.domain.interactor.login.UserDoesNotExistException
 import com.example.mytransactoins.domain.interactor.register.RegistrationException
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.model.User
 import com.example.mytransactoins.domain.repo.UserRepo
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -42,9 +42,9 @@ class UserRepoImpl @Inject constructor(
         )
     }
 
-    override fun addUser(email: String, password: String): NewResult<Unit, RegistrationException> {
+    override fun addUser(email: String, password: String): Result<Unit, RegistrationException> {
         usersPreferences.edit().putString(email, hasher.hash(password)).apply()
-        return NewResult.Success(Unit)
+        return Result.Success(Unit)
     }
 
     override fun getCurrentUser(): User? {
@@ -53,16 +53,16 @@ class UserRepoImpl @Inject constructor(
     }
 
     // TODO change return type to Result<User>
-    override fun logIn(email: String, password: String): NewResult<User, LoginException> {
+    override fun logIn(email: String, password: String): Result<User, LoginException> {
         val savedHashedPassword = usersPreferences.getString(email, null)
-            ?: return NewResult.Error(UserDoesNotExistException())
+            ?: return Result.Error(UserDoesNotExistException())
 
         if (hasher.verify(password, savedHashedPassword).not()) {
-            return NewResult.Error(IncorrectCredentialsException())
+            return Result.Error(IncorrectCredentialsException())
         }
 
         currentUserPreferences.edit().putString(CURRENT_USER, email).apply()
-        return NewResult.Success(User(email))
+        return Result.Success(User(email))
     }
 
     override fun logOut() {

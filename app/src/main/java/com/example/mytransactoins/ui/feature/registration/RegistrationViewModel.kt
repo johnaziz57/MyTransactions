@@ -15,7 +15,7 @@ import com.example.mytransactoins.domain.interactor.register.password_validation
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordIsTooShortException
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordsDoNotMatchException
 import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.mode.UIResult
 import com.example.mytransactoins.ui.feature.registration.password.PasswordFormState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,11 +47,11 @@ class RegistrationViewModel @Inject constructor(
 
     fun submitEmail(email: String) {
         when (val result = validateEmailInteractor.validateEmail(email)) {
-            is NewResult.Success -> {
+            is Result.Success -> {
                 _validateEmail.value = UIResult(isSuccessful = true)
             }
 
-            is NewResult.Error -> {
+            is Result.Error -> {
                 when (result.error) {
                     is BlankEmailException -> {
                         _validateEmail.value =
@@ -70,8 +70,8 @@ class RegistrationViewModel @Inject constructor(
     fun submitEmailVerificationCode(code: String) {
         _validateEmailVerification.value = emailVerificationInteractor.validateCode(code).let {
             when (it) {
-                is NewResult.Success -> UIResult(isSuccessful = true)
-                is NewResult.Error -> {
+                is Result.Success -> UIResult(isSuccessful = true)
+                is Result.Error -> {
                     when (it.error) {
                         is CodeTooShortException -> UIResult(
                             isSuccessful = false,
@@ -91,16 +91,16 @@ class RegistrationViewModel @Inject constructor(
     fun submitPassword(password: String, repeatedPassword: String) {
         when (val result =
             validateRegisterPasswordInteractor.validatePassword(password, repeatedPassword)) {
-            is NewResult.Success -> {
+            is Result.Success -> {
                 _validatePassword.value = PasswordFormState()
                 registrationInteractor.registerUser(email, password).let {
-                    if (it is NewResult.Success) {
+                    if (it is Result.Success) {
                         loginInteractor.login(email, password)
                     }
                 }
             }
 
-            is NewResult.Error -> {
+            is Result.Error -> {
                 _validatePassword.value = when (result.error) {
                     is PasswordDoesNotHaveLettersAndDigits -> PasswordFormState(primaryPasswordError = "Password doesn't have both letters and digits")
                     is PasswordIsTooShortException -> PasswordFormState(primaryPasswordError = "Password is too short")

@@ -1,6 +1,6 @@
 package com.example.mytransactoins.domain.interactor.register
 
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.repo.UserRepo
 import org.junit.Before
 import org.junit.Test
@@ -25,9 +25,9 @@ class RegistrationInteractorImplTest {
 
     @Test
     fun `test registration is successful`() {
-        `when`(userRepo.addUser(anyString(), anyString())).thenReturn(NewResult.Success(Unit))
+        `when`(userRepo.addUser(anyString(), anyString())).thenReturn(Result.Success(Unit))
         val result = registrationInteractor.registerUser("email", "password")
-        assert(result is NewResult.Success)
+        assert(result is Result.Success)
     }
 
 }

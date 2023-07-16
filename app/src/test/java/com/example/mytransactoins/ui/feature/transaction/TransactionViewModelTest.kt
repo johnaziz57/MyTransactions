@@ -3,7 +3,7 @@ package com.example.mytransactoins.ui.feature.transaction
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractor
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.getOrAwaitValue
 import org.junit.Assert.*
 import org.junit.Before
@@ -35,7 +35,7 @@ class TransactionViewModelTest {
     @Test
     fun `test loading transaction list`() {
         val transactionList = listOf("transaction 1", "transaction 2")
-        `when`(transactionInteractor.getTransactions()).thenReturn(NewResult.Success(transactionList))
+        `when`(transactionInteractor.getTransactions()).thenReturn(Result.Success(transactionList))
 
         viewModel.loadTransactions()
         val value = viewModel.transactionListLiveData.getOrAwaitValue()

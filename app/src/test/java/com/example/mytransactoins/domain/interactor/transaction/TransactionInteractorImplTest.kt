@@ -1,6 +1,6 @@
 package com.example.mytransactoins.domain.interactor.transaction
 
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.repo.TransactionRepo
 import org.junit.Assert.*
 import org.junit.Before
@@ -26,10 +26,10 @@ class TransactionInteractorImplTest {
     fun `test get transactions`() {
         val transactionList = listOf("transaction 1", "transaction 2")
         Mockito.`when`(transactionRepo.getTransactions())
-            .thenReturn(NewResult.Success(transactionList))
+            .thenReturn(Result.Success(transactionList))
         val result = transactionInteractor.getTransactions()
         assert(result.isSuccessful())
-        assertEquals((result as? NewResult.Success)?.data, transactionList)
+        assertEquals((result as? Result.Success)?.data, transactionList)
     }
 
 

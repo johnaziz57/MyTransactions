@@ -2,7 +2,7 @@ package com.example.mytransactoins.domain.interactor.login
 
 import com.example.mytransactoins.domain.interactor.common.ValidateEmailException
 import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.model.User
 import com.example.mytransactoins.domain.repo.UserRepo
 import com.example.mytransactoins.domain.utils.Constants
@@ -13,19 +13,19 @@ class LoginInteractorImpl @Inject constructor(
     private val validateEmailInteractor: ValidateEmailInteractor
 ) : LoginInteractor {
 
-    override fun validateEmail(email: String): NewResult<Unit, ValidateEmailException> {
+    override fun validateEmail(email: String): Result<Unit, ValidateEmailException> {
         return validateEmailInteractor.validateEmail(email)
     }
 
-    override fun validatePasswordLength(password: String): NewResult<Unit, PasswordTooShortException> {
+    override fun validatePasswordLength(password: String): Result<Unit, PasswordTooShortException> {
         if (password.length < Constants.PASSWORD_LENGTH) {
-            return NewResult.Error(PasswordTooShortException())
+            return Result.Error(PasswordTooShortException())
         }
-        return NewResult.Success(Unit)
+        return Result.Success(Unit)
     }
 
 
-    override fun login(email: String, password: String): NewResult<User, LoginException> {
+    override fun login(email: String, password: String): Result<User, LoginException> {
         return userRepo.logIn(email, password)
     }
 

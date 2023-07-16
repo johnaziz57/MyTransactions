@@ -1,7 +1,7 @@
 package com.example.mytransactoins.domain.interactor.transaction
 
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 
 interface TransactionInteractor {
-    fun getTransactions(): NewResult<List<String>, TransactionException>
+    fun getTransactions(): Result<List<String>, TransactionException>
 }

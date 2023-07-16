@@ -1,19 +1,19 @@
 package com.example.mytransactoins.domain.interactor.common
 
 import android.util.Patterns
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import javax.inject.Inject
 
 class ValidateEmailInteractorImpl @Inject constructor() : ValidateEmailInteractor {
-    override fun validateEmail(email: String): NewResult<Unit, ValidateEmailException> {
+    override fun validateEmail(email: String): Result<Unit, ValidateEmailException> {
         if (email.isBlank()) {
-            return NewResult.Error(BlankEmailException())
+            return Result.Error(BlankEmailException())
         }
 
         if (Patterns.EMAIL_ADDRESS.matcher(email).matches().not()) {
-            return NewResult.Error(InvalidEmailException())
+            return Result.Error(InvalidEmailException())
         }
 
-        return NewResult.Success(Unit)
+        return Result.Success(Unit)
     }
 }

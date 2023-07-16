@@ -1,8 +1,8 @@
 package com.example.mytransactoins.domain.repo
 
 import com.example.mytransactoins.domain.interactor.transaction.TransactionException
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 
 interface TransactionRepo {
-    fun getTransactions(): NewResult<List<String>, TransactionException>
+    fun getTransactions(): Result<List<String>, TransactionException>
 }

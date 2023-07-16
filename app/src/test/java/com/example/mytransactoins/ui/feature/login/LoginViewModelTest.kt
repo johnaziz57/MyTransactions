@@ -5,7 +5,7 @@ import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
 import com.example.mytransactoins.domain.interactor.login.IncorrectCredentialsException
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.login.PasswordTooShortException
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.model.User
 import com.example.mytransactoins.ui.feature.getOrAwaitValue
 import org.junit.Assert.*
@@ -37,12 +37,12 @@ class LoginViewModelTest {
     @Test
     fun `test login with invalid email`() {
         `when`(loginInteractor.validateEmail(anyString())).thenReturn(
-            NewResult.Error(
+            Result.Error(
                 InvalidEmailException()
             )
         )
         `when`(loginInteractor.validatePasswordLength(anyString())).thenReturn(
-            NewResult.Success(
+            Result.Success(
                 Unit
             )
         )
@@ -53,9 +53,9 @@ class LoginViewModelTest {
 
     @Test
     fun `test login with invalid password`() {
-        `when`(loginInteractor.validateEmail(anyString())).thenReturn(NewResult.Success(Unit))
+        `when`(loginInteractor.validateEmail(anyString())).thenReturn(Result.Success(Unit))
         `when`(loginInteractor.validatePasswordLength(anyString())).thenReturn(
-            NewResult.Error(PasswordTooShortException())
+            Result.Error(PasswordTooShortException())
         )
         viewModel.login("j@e.com", "pass")
         val value = viewModel.loginFormStateLiveData.getOrAwaitValue()
@@ -65,9 +65,9 @@ class LoginViewModelTest {
     @Test
     fun `test login with valid email and password`() {
         val email = "j@e.com"
-        `when`(loginInteractor.validateEmail(anyString())).thenReturn(NewResult.Success(Unit))
+        `when`(loginInteractor.validateEmail(anyString())).thenReturn(Result.Success(Unit))
         `when`(loginInteractor.validatePasswordLength(anyString())).thenReturn(
-            NewResult.Success(
+            Result.Success(
                 Unit
             )
         )
@@ -76,7 +76,7 @@ class LoginViewModelTest {
                 anyString(),
                 anyString()
             )
-        ).thenReturn(NewResult.Success(User(email)))
+        ).thenReturn(Result.Success(User(email)))
         viewModel.login(email, "password")
         val value = viewModel.loginFormStateLiveData.getOrAwaitValue()
         assert(value.emailError == null)
@@ -86,9 +86,9 @@ class LoginViewModelTest {
     @Test
     fun `test login with valid email and password and successful login`() {
         val email = "j@e.com"
-        `when`(loginInteractor.validateEmail(anyString())).thenReturn(NewResult.Success(Unit))
+        `when`(loginInteractor.validateEmail(anyString())).thenReturn(Result.Success(Unit))
         `when`(loginInteractor.validatePasswordLength(anyString())).thenReturn(
-            NewResult.Success(
+            Result.Success(
                 Unit
             )
         )
@@ -97,7 +97,7 @@ class LoginViewModelTest {
                 anyString(),
                 anyString()
             )
-        ).thenReturn(NewResult.Success(User(email)))
+        ).thenReturn(Result.Success(User(email)))
         viewModel.login(email, "password")
         val value = viewModel.loginResultLiveData.getOrAwaitValue()
         assert(value.isSuccessful)
@@ -105,9 +105,9 @@ class LoginViewModelTest {
 
     @Test
     fun `test login with valid email and password and failed login`() {
-        `when`(loginInteractor.validateEmail(anyString())).thenReturn(NewResult.Success(Unit))
+        `when`(loginInteractor.validateEmail(anyString())).thenReturn(Result.Success(Unit))
         `when`(loginInteractor.validatePasswordLength(anyString())).thenReturn(
-            NewResult.Success(
+            Result.Success(
                 Unit
             )
         )
@@ -116,7 +116,7 @@ class LoginViewModelTest {
                 anyString(),
                 anyString()
             )
-        ).thenReturn(NewResult.Error(IncorrectCredentialsException()))
+        ).thenReturn(Result.Error(IncorrectCredentialsException()))
         viewModel.login("j@e.com", "password")
         val value = viewModel.loginResultLiveData.getOrAwaitValue()
         assertFalse(value.isSuccessful)

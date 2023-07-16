@@ -1,6 +1,6 @@
 package com.example.mytransactoins.domain.interactor.register.password_validation
 
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.utils.Constants
 import javax.inject.Inject
 
@@ -9,19 +9,19 @@ class ValidateRegisterPasswordInteractorImpl @Inject constructor() :
     override fun validatePassword(
         password: String,
         repeatedPassword: String
-    ): NewResult<Unit, PasswordValidationException> {
+    ): Result<Unit, PasswordValidationException> {
         if (password.length < Constants.PASSWORD_LENGTH) {
-            return NewResult.Error(PasswordIsTooShortException())
+            return Result.Error(PasswordIsTooShortException())
         }
         if (password != repeatedPassword) {
-            return NewResult.Error(PasswordsDoNotMatchException())
+            return Result.Error(PasswordsDoNotMatchException())
         }
 
         val containsDigitAndLetters =
             password.any { it.isDigit() } && password.any { it.isLetter() }
         if (!containsDigitAndLetters) {
-            return NewResult.Error(PasswordDoesNotHaveLettersAndDigits())
+            return Result.Error(PasswordDoesNotHaveLettersAndDigits())
         }
-        return NewResult.Success(Unit)
+        return Result.Success(Unit)
     }
 }

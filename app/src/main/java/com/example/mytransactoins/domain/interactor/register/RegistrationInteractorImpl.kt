@@ -1,6 +1,6 @@
 package com.example.mytransactoins.domain.interactor.register
 
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.repo.UserRepo
 import javax.inject.Inject
 
@@ -10,7 +10,7 @@ class RegistrationInteractorImpl @Inject constructor(
     override fun registerUser(
         email: String,
         password: String
-    ): NewResult<Unit, RegistrationException> {
+    ): Result<Unit, RegistrationException> {
         return userRepo.addUser(email, password)
     }
 }

@@ -1,16 +1,16 @@
 package com.example.mytransactoins.domain.interactor.register.email_verification
 
-import com.example.mytransactoins.domain.model.NewResult
+import com.example.mytransactoins.domain.model.Result
 import javax.inject.Inject
 
 class EmailVerificationInteractorImpl @Inject constructor() : EmailVerificationInteractor {
-    override fun validateCode(code: String): NewResult<Unit, EmailCodeVerificationException> {
+    override fun validateCode(code: String): Result<Unit, EmailCodeVerificationException> {
         if (code.length != 4) {
-            return NewResult.Error(CodeTooShortException())
+            return Result.Error(CodeTooShortException())
         }
         if (!code.contains("0")) {
-            return NewResult.Error(IncorrectCodeException())
+            return Result.Error(IncorrectCodeException())
         }
-        return NewResult.Success(Unit)
+        return Result.Success(Unit)
     }
 }
