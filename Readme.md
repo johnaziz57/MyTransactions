@@ -1,7 +1,6 @@
 ## TODO
 
-- [] Testing domain
-- [] Testing viewModels
+- [] Improve UI
 - [] Add Splash screen
 - [] Unify Result class
 - [] Error Handling
@@ -14,6 +13,8 @@
 
 ## Done
 
+- [x] Testing domain
+- [x] Testing viewModels
 - [x] Entry fragment
 - [x] Navigation
 - [x] Encryption

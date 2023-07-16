@@ -15,4 +15,7 @@
     <string name="confirm">Confirm</string>
     <string name="repeat_password">Repeat password</string>
     <string name="verification_code_hint">1234</string>
+    <string name="title_email">Email</string>
+    <string name="title_choose_password">Choose password</string>
+    <string name="title_verification_code">Verification code</string>
 </resources>
