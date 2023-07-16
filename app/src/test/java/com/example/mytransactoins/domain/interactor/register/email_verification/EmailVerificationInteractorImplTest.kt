@@ -1,6 +1,5 @@
-package com.example.mytransactoins.domain.interactor.register
+package com.example.mytransactoins.domain.interactor.register.email_verification
 
-import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractorImpl
 import com.example.mytransactoins.domain.model.Result
 import org.junit.Before
 import org.junit.Test

@@ -1,6 +1,5 @@
-package com.example.mytransactoins.domain.interactor.register
+package com.example.mytransactoins.domain.interactor.register.password_validation
 
-import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractorImpl
 import com.example.mytransactoins.domain.model.Result
 import org.junit.Before
 import org.junit.Test
