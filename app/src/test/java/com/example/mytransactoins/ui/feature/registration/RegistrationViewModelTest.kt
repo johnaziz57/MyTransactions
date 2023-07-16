@@ -1,10 +1,13 @@
 package com.example.mytransactoins.ui.feature.registration
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
 import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
+import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.register.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
 import com.example.mytransactoins.domain.interactor.register.ValidateRegisterPasswordInteractor
+import com.example.mytransactoins.domain.model.NewResult
 import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.getOrAwaitValue
 import org.junit.Assert.*
@@ -35,6 +38,9 @@ class RegistrationViewModelTest {
     @Mock
     private lateinit var registrationInteractor: RegistrationInteractor
 
+    @Mock
+    private lateinit var loginInteractor: LoginInteractor
+
     private lateinit var viewModel: RegistrationViewModel
 
     @Before
@@ -43,13 +49,14 @@ class RegistrationViewModelTest {
             validateEmailInteractor,
             emailVerificationInteractor,
             validateRegisterPasswordInteractor,
-            registrationInteractor
+            registrationInteractor,
+            loginInteractor,
         )
     }
 
     @Test
     fun `test submit valid email`() {
-        `when`(validateEmailInteractor.validateEmail(anyString())).thenReturn(Result(isSuccessful = true))
+        `when`(validateEmailInteractor.validateEmail(anyString())).thenReturn(NewResult.Success(Unit))
         viewModel.submitEmail("j@e.com")
         val value = viewModel.validateEmailLiveData.getOrAwaitValue()
         assert(value.isSuccessful)
@@ -58,9 +65,8 @@ class RegistrationViewModelTest {
     @Test
     fun `test submit invalid email`() {
         `when`(validateEmailInteractor.validateEmail(anyString())).thenReturn(
-            Result(
-                isSuccessful = false,
-                message = ""
+            NewResult.Error(
+                InvalidEmailException()
             )
         )
         viewModel.submitEmail("j@")
@@ -93,6 +99,12 @@ class RegistrationViewModelTest {
     fun `test submit valid password`() {
         `when`(
             validateRegisterPasswordInteractor.validatePassword(
+                anyString(),
+                anyString()
+            )
+        ).thenReturn(Result(isSuccessful = true))
+        `when`(
+            registrationInteractor.registerUser(
                 anyString(),
                 anyString()
             )

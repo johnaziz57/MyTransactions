@@ -1,13 +1,10 @@
 package com.example.mytransactoins.domain.interactor.register
 
-import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.repo.UserRepo
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.anyString
-import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
 
@@ -25,8 +22,8 @@ class RegistrationInteractorImplTest {
 
     @Test
     fun `test registration is successful`() {
-        `when`(userRepo.logIn(anyString(), anyString())).thenReturn(Result(isSuccessful = true))
-        assert(registrationInteractor.registerUser("email", "password").isSuccessful)
+        val email = "email"
+        assert(registrationInteractor.registerUser(email, "password").isSuccessful)
     }
 
 }

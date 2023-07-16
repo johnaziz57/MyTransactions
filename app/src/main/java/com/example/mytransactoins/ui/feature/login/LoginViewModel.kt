@@ -41,6 +41,7 @@ class LoginViewModel @Inject constructor(
                 }
 
                 is NewResult.Error -> {
+                    _loginResult.value = Result(isSuccessful = false)
                     _loginFormState.value = when (result.error) {
                         is IncorrectCredentialsException -> LoginFormState(passwordError = "Incorrect password")
                         is UserDoesNotExistException -> LoginFormState(emailError = "User doesn't exist")
