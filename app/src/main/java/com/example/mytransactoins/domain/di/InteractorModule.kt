@@ -1,17 +1,17 @@
 package com.example.mytransactoins.domain.di
 
+import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
+import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractorImpl
 import com.example.mytransactoins.domain.interactor.entry.EntryInteractor
 import com.example.mytransactoins.domain.interactor.entry.EntryInteractorImpl
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractorImpl
-import com.example.mytransactoins.domain.interactor.register.EmailInteractor
-import com.example.mytransactoins.domain.interactor.register.EmailInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.EmailVerificationInteractorImpl
-import com.example.mytransactoins.domain.interactor.register.PasswordInteractor
-import com.example.mytransactoins.domain.interactor.register.PasswordInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractorImpl
+import com.example.mytransactoins.domain.interactor.register.ValidateRegisterPasswordInteractor
+import com.example.mytransactoins.domain.interactor.register.ValidateRegisterPasswordInteractorImpl
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractor
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractorImpl
 import dagger.Binds
@@ -30,10 +30,10 @@ interface InteractorModule {
     fun bindLoginInteractor(loginInteractorImpl: LoginInteractorImpl): LoginInteractor
 
     @Binds
-    fun bindEmailInteractor(emailInteractorImpl: EmailInteractorImpl): EmailInteractor
+    fun bindEmailInteractor(emailInteractorImpl: ValidateEmailInteractorImpl): ValidateEmailInteractor
 
     @Binds
-    fun bindPasswordInteractor(passwordInteractorImpl: PasswordInteractorImpl): PasswordInteractor
+    fun bindPasswordInteractor(validatePasswordInteractorImpl: ValidateRegisterPasswordInteractorImpl): ValidateRegisterPasswordInteractor
 
     @Binds
     fun bindRegistrationInteractor(registrationInteractorImpl: RegistrationInteractorImpl): RegistrationInteractor
