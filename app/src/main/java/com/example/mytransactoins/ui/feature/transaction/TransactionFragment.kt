@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mytransactoins.R
 import com.example.mytransactoins.databinding.FragmentTransactionBinding
+import com.example.mytransactoins.ui.feature.transaction.adapter.TransactionAdapter
 import com.example.mytransactoins.ui.utils.navigateToNewTaskActivity
 import com.example.mytransactoins.ui.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +19,8 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.loadTransactions()
+        val adapter = TransactionAdapter()
+        binding.recyclerViewCollection.adapter = adapter
 
         binding.imageLogout.setOnClickListener {
             viewModel.logout()
@@ -25,7 +28,8 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction) {
         }
 
         viewModel.transactionListLiveData.observe(viewLifecycleOwner) {
-            binding.textViewTransactions.text = it.data.toString()
+            if (it.isSuccessful.not()) return@observe
+            adapter.setItems(it.data ?: emptyList())
         }
     }
 }

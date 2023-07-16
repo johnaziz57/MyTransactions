@@ -3,7 +3,6 @@
 - [] Handle going back in the verification code screen
 - [] Handle autofocus on text fields
 - [] Add Splash screen
-- [] Error Handling
 - [] Handle register with previous email
 - [] Replace SharedPreference with PreferenceDataStore
 - [] Replace PreferenceDataStore with ProtoDataStore
@@ -26,3 +25,4 @@
 - [x] Login
 - [x] Improve UI
 - [x] Unify Result class
+- [x] Error Handling

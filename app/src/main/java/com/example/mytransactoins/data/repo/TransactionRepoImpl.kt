@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 class TransactionRepoImpl @Inject constructor() : TransactionRepo {
     override fun getTransactions(): Result<List<String>, TransactionException> {
-        return Result.Success(listOf("Transaction 1", "Transaction 2", "Transaction 3"))
+        return Result.Success((1..100).map { "Transaction $it" })
     }
 }
