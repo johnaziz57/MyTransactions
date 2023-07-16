@@ -1,4 +1,4 @@
-package com.example.mytransactoins.domain.interactor.register
+package com.example.mytransactoins.domain.interactor.register.password_validation
 
 import com.example.mytransactoins.domain.model.Result
 
