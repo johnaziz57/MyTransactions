@@ -2,7 +2,6 @@
 
 - [] Handle going back in the verification code screen
 - [] Handle autofocus on text fields
-- [] Add Splash screen
 - [] Handle register with previous email
 - [] Replace SharedPreference with ProtoDataStore
 - [] Room
@@ -25,3 +24,4 @@
 - [x] Unify Result class
 - [x] Error Handling
 - [x] Create model for UI state similar to LoginFormState in d5af9968
+- [x] ~Add Splash screen~ Added progress bar instead
