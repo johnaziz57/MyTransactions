@@ -23,7 +23,7 @@ class EmailVerificationFragment : Fragment(R.layout.fragment_email_verification)
             if (it.isSuccessful) {
                 findNavController().navigate(R.id.action_emailVerificationFragment_to_passwordFragment)
             } else {
-                binding.editTextVerificationCode.error = it.message
+                binding.editTextVerificationCode.error = it.errorMessage
             }
         }
     }

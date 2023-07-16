@@ -1,5 +1,6 @@
 package com.example.mytransactoins.domain.interactor.common
 
+import com.example.mytransactoins.domain.model.NewResult
 import org.junit.Test
 
 /**
@@ -12,7 +13,7 @@ internal class ValidateEmailInteractorImplTest {
     fun testValidEmails() {
         val validateEmailInteractor = ValidateEmailInteractorImpl()
         fun testValidEmail(email: String) {
-            assert(validateEmailInteractor.validateEmail(email).isSuccessful)
+            assert(validateEmailInteractor.validateEmail(email) is NewResult.Success)
         }
 
         listOf(
@@ -28,7 +29,7 @@ internal class ValidateEmailInteractorImplTest {
     fun testInValidEmails() {
         val validateEmailInteractor = ValidateEmailInteractorImpl()
         fun testInvalidEmail(email: String) {
-            assert(!validateEmailInteractor.validateEmail(email).isSuccessful)
+            assert(validateEmailInteractor.validateEmail(email) is NewResult.Error)
         }
 
         listOf("", "j.1@", "@something.com", "123@.com").forEach {

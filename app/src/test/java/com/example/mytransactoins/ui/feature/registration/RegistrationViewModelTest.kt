@@ -4,9 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
 import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
-import com.example.mytransactoins.domain.interactor.register.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
 import com.example.mytransactoins.domain.interactor.register.ValidateRegisterPasswordInteractor
+import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
+import com.example.mytransactoins.domain.interactor.register.email_verification.IncorrectCodeException
 import com.example.mytransactoins.domain.model.NewResult
 import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.getOrAwaitValue
@@ -76,7 +77,11 @@ class RegistrationViewModelTest {
 
     @Test
     fun `test submit valid email verification code`() {
-        `when`(emailVerificationInteractor.validateCode(anyString())).thenReturn(Result(isSuccessful = true))
+        `when`(emailVerificationInteractor.validateCode(anyString())).thenReturn(
+            NewResult.Success(
+                Unit
+            )
+        )
         viewModel.submitEmailVerificationCode("1234")
         val value = viewModel.validateEmailVerificationLiveData.getOrAwaitValue()
         assert(value.isSuccessful)
@@ -85,10 +90,7 @@ class RegistrationViewModelTest {
     @Test
     fun `test submit invalid email verification code`() {
         `when`(emailVerificationInteractor.validateCode(anyString())).thenReturn(
-            Result(
-                isSuccessful = false,
-                message = ""
-            )
+            NewResult.Error(IncorrectCodeException())
         )
         viewModel.submitEmailVerificationCode("123")
         val value = viewModel.validateEmailVerificationLiveData.getOrAwaitValue()

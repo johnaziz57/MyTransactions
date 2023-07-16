@@ -7,9 +7,11 @@ import com.example.mytransactoins.domain.interactor.common.BlankEmailException
 import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
 import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
-import com.example.mytransactoins.domain.interactor.register.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
 import com.example.mytransactoins.domain.interactor.register.ValidateRegisterPasswordInteractor
+import com.example.mytransactoins.domain.interactor.register.email_verification.CodeTooShortException
+import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
+import com.example.mytransactoins.domain.interactor.register.email_verification.IncorrectCodeException
 import com.example.mytransactoins.domain.model.NewResult
 import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.mode.UIResult
@@ -27,7 +29,7 @@ class RegistrationViewModel @Inject constructor(
     val validateEmailLiveData: LiveData<UIResult<Unit>>
         get() = _validateEmail
 
-    val validateEmailVerificationLiveData: LiveData<Result>
+    val validateEmailVerificationLiveData: LiveData<UIResult<Unit>>
         get() = _validateEmailVerification
 
     val validatePasswordLiveData: LiveData<Result>
@@ -35,7 +37,7 @@ class RegistrationViewModel @Inject constructor(
 
 
     private val _validateEmail = MutableLiveData<UIResult<Unit>>()
-    private val _validateEmailVerification = MutableLiveData<Result>()
+    private val _validateEmailVerification = MutableLiveData<UIResult<Unit>>()
     private val _validatePassword = MutableLiveData<Result>()
 
     private var email: String = ""
@@ -63,7 +65,24 @@ class RegistrationViewModel @Inject constructor(
     }
 
     fun submitEmailVerificationCode(code: String) {
-        _validateEmailVerification.value = emailVerificationInteractor.validateCode(code)
+        _validateEmailVerification.value = emailVerificationInteractor.validateCode(code).let {
+            when (it) {
+                is NewResult.Success -> UIResult(isSuccessful = true)
+                is NewResult.Error -> {
+                    when (it.error) {
+                        is CodeTooShortException -> UIResult(
+                            isSuccessful = false,
+                            errorMessage = "Code too short"
+                        )
+
+                        is IncorrectCodeException -> UIResult(
+                            isSuccessful = false,
+                            errorMessage = "Incorrect code"
+                        )
+                    }
+                }
+            }
+        }
     }
 
     fun submitPassword(password: String, repeatedPassword: String) {
