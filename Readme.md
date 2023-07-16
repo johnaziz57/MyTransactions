@@ -6,6 +6,9 @@ Accessing those transactions must happen either after Registration or Login
 
 First time users to the app must register first, later on the user can login
 
+https://github.com/johnaziz57/MyTransactions/assets/14923445/f366e9dc-cb7a-48fa-829c-543a195a2587
+
+
 ### Registration
 
 1. Open the app
