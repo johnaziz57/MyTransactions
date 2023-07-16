@@ -42,7 +42,6 @@ class UserRepoImpl @Inject constructor(
         usersPreferences.edit().putString(email, hasher.hash(password)).apply()
     }
 
-    // TODO change return type to User
     override fun getCurrentUser(): User? {
         val email = currentUserPreferences.getString(CURRENT_USER, null) ?: return null
         return User(email)
