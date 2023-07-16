@@ -1,12 +1,13 @@
 ## TODO
 
+- [] Testing domain
+- [] Testing viewModels
 - [] Add Splash screen
 - [] Unify Result class
 - [] Error Handling
 - [] Handle register with previous email
 - [] Replace SharedPreference with PreferenceDataStore
 - [] Replace PreferenceDataStore with ProtoDataStore
-- [] Testing domain
 - [] Room
 - [] Navigation testing
 - [] Create model for UI state similar to LoginFormState in d5af9968
