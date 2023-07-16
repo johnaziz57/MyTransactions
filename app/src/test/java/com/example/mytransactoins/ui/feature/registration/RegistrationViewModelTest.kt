@@ -10,7 +10,6 @@ import com.example.mytransactoins.domain.interactor.register.email_verification.
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordDoesNotHaveLettersAndDigits
 import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
 import com.example.mytransactoins.domain.model.NewResult
-import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.getOrAwaitValue
 import org.junit.Assert.*
 import org.junit.Before
@@ -111,7 +110,7 @@ class RegistrationViewModelTest {
                 anyString(),
                 anyString()
             )
-        ).thenReturn(Result(isSuccessful = true))
+        ).thenReturn(NewResult.Success(Unit))
         viewModel.submitPassword("1234", "1234")
         val value = viewModel.validatePasswordLiveData.getOrAwaitValue()
         assert(value.isValid)

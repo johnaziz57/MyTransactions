@@ -8,6 +8,7 @@ import com.example.mytransactoins.data.util.Hasher
 import com.example.mytransactoins.domain.interactor.login.IncorrectCredentialsException
 import com.example.mytransactoins.domain.interactor.login.LoginException
 import com.example.mytransactoins.domain.interactor.login.UserDoesNotExistException
+import com.example.mytransactoins.domain.interactor.register.RegistrationException
 import com.example.mytransactoins.domain.model.NewResult
 import com.example.mytransactoins.domain.model.User
 import com.example.mytransactoins.domain.repo.UserRepo
@@ -41,8 +42,9 @@ class UserRepoImpl @Inject constructor(
         )
     }
 
-    override fun addUser(email: String, password: String) {
+    override fun addUser(email: String, password: String): NewResult<Unit, RegistrationException> {
         usersPreferences.edit().putString(email, hasher.hash(password)).apply()
+        return NewResult.Success(Unit)
     }
 
     override fun getCurrentUser(): User? {

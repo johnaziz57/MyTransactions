@@ -94,7 +94,7 @@ class RegistrationViewModel @Inject constructor(
             is NewResult.Success -> {
                 _validatePassword.value = PasswordFormState()
                 registrationInteractor.registerUser(email, password).let {
-                    if (it.isSuccessful) {
+                    if (it is NewResult.Success) {
                         loginInteractor.login(email, password)
                     }
                 }
