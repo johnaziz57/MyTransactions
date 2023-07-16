@@ -1,6 +1,5 @@
 ## TODO
 
-- [] Unify Result class
 - [] Handle going back in the verification code screen
 - [] Handle autofocus on text fields
 - [] Add Splash screen
@@ -26,3 +25,4 @@
 - [x] Check best practices for either creating a cipher every time or reuse the old one
 - [x] Login
 - [x] Improve UI
+- [x] Unify Result class
