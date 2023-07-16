@@ -4,11 +4,9 @@
 - [] Handle autofocus on text fields
 - [] Add Splash screen
 - [] Handle register with previous email
-- [] Replace SharedPreference with PreferenceDataStore
-- [] Replace PreferenceDataStore with ProtoDataStore
+- [] Replace SharedPreference with ProtoDataStore
 - [] Room
 - [] Navigation testing
-- [] Create model for UI state similar to LoginFormState in d5af9968
 
 ## Done
 
@@ -26,3 +24,4 @@
 - [x] Improve UI
 - [x] Unify Result class
 - [x] Error Handling
+- [x] Create model for UI state similar to LoginFormState in d5af9968
