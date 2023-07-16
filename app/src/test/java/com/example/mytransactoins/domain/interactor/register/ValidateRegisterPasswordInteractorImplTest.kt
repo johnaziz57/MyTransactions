@@ -1,5 +1,7 @@
 package com.example.mytransactoins.domain.interactor.register
 
+import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractorImpl
+import com.example.mytransactoins.domain.model.NewResult
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,7 +49,7 @@ class ValidateRegisterPasswordInteractorImplTest {
         return validateRegistrationInteractor.validatePassword(
             password,
             repeatedPassword
-        ).isSuccessful
+        ) is NewResult.Success
     }
 
 }

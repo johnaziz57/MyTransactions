@@ -5,9 +5,10 @@ import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
 import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
-import com.example.mytransactoins.domain.interactor.register.ValidateRegisterPasswordInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.IncorrectCodeException
+import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordDoesNotHaveLettersAndDigits
+import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
 import com.example.mytransactoins.domain.model.NewResult
 import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.getOrAwaitValue
@@ -104,7 +105,7 @@ class RegistrationViewModelTest {
                 anyString(),
                 anyString()
             )
-        ).thenReturn(Result(isSuccessful = true))
+        ).thenReturn(NewResult.Success(Unit))
         `when`(
             registrationInteractor.registerUser(
                 anyString(),
@@ -113,7 +114,7 @@ class RegistrationViewModelTest {
         ).thenReturn(Result(isSuccessful = true))
         viewModel.submitPassword("1234", "1234")
         val value = viewModel.validatePasswordLiveData.getOrAwaitValue()
-        assert(value.isSuccessful)
+        assert(value.isValid)
     }
 
     @Test
@@ -123,10 +124,10 @@ class RegistrationViewModelTest {
                 anyString(),
                 anyString()
             )
-        ).thenReturn(Result(isSuccessful = false))
+        ).thenReturn(NewResult.Error(PasswordDoesNotHaveLettersAndDigits()))
         viewModel.submitPassword("1234", "1")
         val value = viewModel.validatePasswordLiveData.getOrAwaitValue()
-        assertFalse(value.isSuccessful)
+        assertFalse(value.isValid)
     }
 
 }

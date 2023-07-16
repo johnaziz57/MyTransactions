@@ -8,10 +8,10 @@ import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractorImpl
-import com.example.mytransactoins.domain.interactor.register.ValidateRegisterPasswordInteractor
-import com.example.mytransactoins.domain.interactor.register.ValidateRegisterPasswordInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractorImpl
+import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
+import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractorImpl
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractor
 import com.example.mytransactoins.domain.interactor.transaction.TransactionInteractorImpl
 import dagger.Binds

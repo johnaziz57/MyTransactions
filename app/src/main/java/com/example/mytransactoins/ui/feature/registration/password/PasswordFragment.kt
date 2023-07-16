@@ -18,15 +18,16 @@ class PasswordFragment : Fragment(R.layout.fragment_password) {
         with(binding) {
             buttonConfirm.setOnClickListener {
                 viewModel.submitPassword(
-                    editTextPassword.text.toString(),
-                    editTextRepeatPassword.text.toString()
+                    editTextPrimaryPassword.text.toString(),
+                    editTextSecondaryPassword.text.toString()
                 )
             }
             viewModel.validatePasswordLiveData.observe(viewLifecycleOwner) {
-                if (!it.isSuccessful) {
-                    editTextPassword.error = it.message
-                } else {
+                if (it.isValid) {
                     findNavController().navigateToNewTaskActivity(PasswordFragmentDirections.actionPasswordFragmentToTransactionActivity())
+                } else {
+                    editTextPrimaryPassword.error = it.primaryPasswordError
+                    editTextSecondaryPassword.error = it.secondaryPasswordError
                 }
             }
         }

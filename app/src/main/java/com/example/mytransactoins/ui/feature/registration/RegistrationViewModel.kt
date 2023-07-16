@@ -8,13 +8,16 @@ import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
 import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
-import com.example.mytransactoins.domain.interactor.register.ValidateRegisterPasswordInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.CodeTooShortException
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.IncorrectCodeException
+import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordDoesNotHaveLettersAndDigits
+import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordIsTooShortException
+import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordsDoNotMatchException
+import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
 import com.example.mytransactoins.domain.model.NewResult
-import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.ui.feature.mode.UIResult
+import com.example.mytransactoins.ui.feature.registration.password.PasswordFormState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -32,13 +35,13 @@ class RegistrationViewModel @Inject constructor(
     val validateEmailVerificationLiveData: LiveData<UIResult<Unit>>
         get() = _validateEmailVerification
 
-    val validatePasswordLiveData: LiveData<Result>
+    val validatePasswordLiveData: LiveData<PasswordFormState>
         get() = _validatePassword
 
 
     private val _validateEmail = MutableLiveData<UIResult<Unit>>()
     private val _validateEmailVerification = MutableLiveData<UIResult<Unit>>()
-    private val _validatePassword = MutableLiveData<Result>()
+    private val _validatePassword = MutableLiveData<PasswordFormState>()
 
     private var email: String = ""
 
@@ -86,14 +89,24 @@ class RegistrationViewModel @Inject constructor(
     }
 
     fun submitPassword(password: String, repeatedPassword: String) {
-        val result = validateRegisterPasswordInteractor.validatePassword(password, repeatedPassword)
-        if (result.isSuccessful) {
-            registrationInteractor.registerUser(email, password).let {
-                if (it.isSuccessful) {
-                    loginInteractor.login(email, password)
+        when (val result =
+            validateRegisterPasswordInteractor.validatePassword(password, repeatedPassword)) {
+            is NewResult.Success -> {
+                _validatePassword.value = PasswordFormState()
+                registrationInteractor.registerUser(email, password).let {
+                    if (it.isSuccessful) {
+                        loginInteractor.login(email, password)
+                    }
+                }
+            }
+
+            is NewResult.Error -> {
+                _validatePassword.value = when (result.error) {
+                    is PasswordDoesNotHaveLettersAndDigits -> PasswordFormState(primaryPasswordError = "Password doesn't have both letters and digits")
+                    is PasswordIsTooShortException -> PasswordFormState(primaryPasswordError = "Password is too short")
+                    is PasswordsDoNotMatchException -> PasswordFormState(secondaryPasswordError = "Passwords don't match")
                 }
             }
         }
-        _validatePassword.value = result
     }
 }

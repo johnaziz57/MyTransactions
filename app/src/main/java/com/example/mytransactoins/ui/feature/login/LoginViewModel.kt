@@ -26,8 +26,8 @@ class LoginViewModel @Inject constructor(
     private val _loginResult = MutableLiveData<Result>()
 
     fun login(email: String, password: String) {
-        val emailError = getEmailErrorMessage(email)
-        val passwordError = getPassowrdErrorMessage(password)
+        val emailError = validateEmail(email)
+        val passwordError = validatePassword(password)
         val isValidInput = emailError == null && passwordError == null
 
         _loginFormState.value = LoginFormState(
@@ -51,7 +51,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun getEmailErrorMessage(email: String): String? {
+    private fun validateEmail(email: String): String? {
         when (val result = loginInteractor.validateEmail(email)) {
             is NewResult.Success -> {
                 return null
@@ -71,8 +71,8 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun getPassowrdErrorMessage(password: String): String? {
-        return when (val result = loginInteractor.validatePasswordLength(password)) {
+    private fun validatePassword(password: String): String? {
+        return when (loginInteractor.validatePasswordLength(password)) {
             is NewResult.Success -> {
                 null
             }
