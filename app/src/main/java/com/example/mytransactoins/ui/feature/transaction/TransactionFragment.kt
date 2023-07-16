@@ -17,9 +17,15 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction) {
     private val viewModel: TransactionViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.loadTransactions()
+
         binding.imageLogout.setOnClickListener {
             viewModel.logout()
             findNavController().navigateToNewTaskActivity(TransactionFragmentDirections.actionTransactionFragmentToMainActivity())
+        }
+
+        viewModel.transactionListLiveData.observe(viewLifecycleOwner) {
+            binding.textViewTransactions.text = it.toString()
         }
     }
 }
