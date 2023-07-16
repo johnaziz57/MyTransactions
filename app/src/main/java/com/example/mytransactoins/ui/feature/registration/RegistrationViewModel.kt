@@ -3,11 +3,12 @@ package com.example.mytransactoins.ui.feature.registration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mytransactoins.domain.interactor.common.BlankEmailException
-import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
-import com.example.mytransactoins.domain.interactor.common.ValidateEmailFormatInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
+import com.example.mytransactoins.domain.interactor.register.email.AlreadyRegisteredException
+import com.example.mytransactoins.domain.interactor.register.email.BlankEmailException
+import com.example.mytransactoins.domain.interactor.register.email.InvalidEmailException
+import com.example.mytransactoins.domain.interactor.register.email.RegistrationEmailInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.CodeTooShortException
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.IncorrectCodeException
@@ -23,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-    private val validateEmailFormatInteractor: ValidateEmailFormatInteractor,
+    private val registrationEmailInteractor: RegistrationEmailInteractor,
     private val emailVerificationInteractor: EmailVerificationInteractor,
     private val validateRegisterPasswordInteractor: ValidateRegisterPasswordInteractor,
     private val registrationInteractor: RegistrationInteractor,
@@ -51,7 +52,7 @@ class RegistrationViewModel @Inject constructor(
     private var email: String = ""
 
     fun submitEmail(email: String) {
-        when (val result = validateEmailFormatInteractor.validateEmail(email)) {
+        when (val result = registrationEmailInteractor.validateEmail(email)) {
             is Result.Success -> {
                 _validateEmail.value = LiveDataResult(isSuccessful = true)
             }
@@ -68,6 +69,14 @@ class RegistrationViewModel @Inject constructor(
                             LiveDataResult(
                                 isSuccessful = false,
                                 errorMessage = "Invalid email format"
+                            )
+                    }
+
+                    is AlreadyRegisteredException -> {
+                        _validateEmail.value =
+                            LiveDataResult(
+                                isSuccessful = false,
+                                errorMessage = "This email already exists"
                             )
                     }
                 }

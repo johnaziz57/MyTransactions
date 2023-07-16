@@ -8,6 +8,8 @@ import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractorImpl
+import com.example.mytransactoins.domain.interactor.register.email.RegistrationEmailInteractor
+import com.example.mytransactoins.domain.interactor.register.email.RegistrationEmailInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractorImpl
 import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
@@ -31,6 +33,9 @@ interface InteractorModule {
 
     @Binds
     fun bindEmailInteractor(emailInteractorImpl: ValidateEmailFormatInteractorImpl): ValidateEmailFormatInteractor
+
+    @Binds
+    fun bindRegistrationEmailInteractor(registrationEmailInteractorImpl: RegistrationEmailInteractorImpl): RegistrationEmailInteractor
 
     @Binds
     fun bindPasswordInteractor(validatePasswordInteractorImpl: ValidateRegisterPasswordInteractorImpl): ValidateRegisterPasswordInteractor

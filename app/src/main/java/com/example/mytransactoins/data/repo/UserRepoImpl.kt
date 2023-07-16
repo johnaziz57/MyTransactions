@@ -68,6 +68,10 @@ class UserRepoImpl @Inject constructor(
         currentUserPreferences.edit().putString(CURRENT_USER, null).apply()
     }
 
+    override fun hasUser(email: String): Boolean {
+        return usersPreferences.contains(email)
+    }
+
     companion object {
         private const val USERS_PREFERENCES = "USERS_PREFERENCES"
         private const val CURRENT_USER_PREFERENCES = "CURRENT_USER_PREFERENCES"

@@ -10,4 +10,5 @@ interface UserRepo {
     fun getCurrentUser(): User?
     fun logIn(email: String, password: String): Result<User, LoginException>
     fun logOut()
+    fun hasUser(email: String): Boolean
 }

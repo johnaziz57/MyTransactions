@@ -1,10 +1,10 @@
 package com.example.mytransactoins.ui.feature.registration
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
-import com.example.mytransactoins.domain.interactor.common.ValidateEmailFormatInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
+import com.example.mytransactoins.domain.interactor.register.email.InvalidEmailException
+import com.example.mytransactoins.domain.interactor.register.email.RegistrationEmailInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.IncorrectCodeException
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordDoesNotHaveLettersAndDigits
@@ -30,7 +30,7 @@ class RegistrationViewModelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    private lateinit var validateEmailFormatInteractor: ValidateEmailFormatInteractor
+    private lateinit var registrationEmailInteractor: RegistrationEmailInteractor
 
     @Mock
     private lateinit var emailVerificationInteractor: EmailVerificationInteractor
@@ -49,7 +49,7 @@ class RegistrationViewModelTest {
     @Before
     fun setup() {
         viewModel = RegistrationViewModel(
-            validateEmailFormatInteractor,
+            registrationEmailInteractor,
             emailVerificationInteractor,
             validateRegisterPasswordInteractor,
             registrationInteractor,
@@ -59,7 +59,7 @@ class RegistrationViewModelTest {
 
     @Test
     fun `test submit valid email`() {
-        `when`(validateEmailFormatInteractor.validateEmail(anyString())).thenReturn(
+        `when`(registrationEmailInteractor.validateEmail(anyString())).thenReturn(
             Result.Success(
                 Unit
             )
@@ -71,7 +71,7 @@ class RegistrationViewModelTest {
 
     @Test
     fun `test submit invalid email`() {
-        `when`(validateEmailFormatInteractor.validateEmail(anyString())).thenReturn(
+        `when`(registrationEmailInteractor.validateEmail(anyString())).thenReturn(
             Result.Error(
                 InvalidEmailException()
             )
