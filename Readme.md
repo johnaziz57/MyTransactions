@@ -1,6 +1,7 @@
 ## TODO
 
 - [] Unify Result class
+- [] Handle going back in the verification code screen
 - [] Handle autofocus on text fields
 - [] Add Splash screen
 - [] Error Handling

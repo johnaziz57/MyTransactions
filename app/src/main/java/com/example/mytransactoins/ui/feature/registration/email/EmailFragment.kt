@@ -26,7 +26,7 @@ class EmailFragment : Fragment(R.layout.fragment_email) {
             if (it.isSuccessful) {
                 findNavController().navigate(R.id.action_emailFragment_to_emailVerificationFragment)
             } else {
-                binding.editTextEmail.error = it.message
+                binding.editTextEmail.error = it.errorMessage
             }
         }
     }

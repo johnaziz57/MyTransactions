@@ -9,6 +9,6 @@ class RegistrationInteractorImpl @Inject constructor(
 ) : RegistrationInteractor {
     override fun registerUser(email: String, password: String): Result {
         userRepo.addUser(email, password)
-        return userRepo.logIn(email, password)
+        return Result(isSuccessful = true)
     }
 }

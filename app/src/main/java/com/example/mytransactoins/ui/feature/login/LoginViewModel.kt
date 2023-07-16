@@ -3,7 +3,12 @@ package com.example.mytransactoins.ui.feature.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.mytransactoins.domain.interactor.common.BlankEmailException
+import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
+import com.example.mytransactoins.domain.interactor.login.IncorrectCredentialsException
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
+import com.example.mytransactoins.domain.interactor.login.UserDoesNotExistException
+import com.example.mytransactoins.domain.model.NewResult
 import com.example.mytransactoins.domain.model.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,22 +26,59 @@ class LoginViewModel @Inject constructor(
     private val _loginResult = MutableLiveData<Result>()
 
     fun login(email: String, password: String) {
-        val emailError = loginInteractor.validateEmail(email).message
-        val passwordError = loginInteractor.validatePasswordLength(password).message
+        val emailError = getEmailErrorMessage(email)
+        val passwordError = getPassowrdErrorMessage(password)
         val isValidInput = emailError == null && passwordError == null
 
         _loginFormState.value = LoginFormState(
-            emailError = loginInteractor.validateEmail(email).message,
-            passwordError = loginInteractor.validatePasswordLength(password).message,
+            emailError = emailError,
+            passwordError = passwordError
         )
         if (isValidInput) {
-            val result = loginInteractor.login(email, password)
-            // TODO add specific login error
-            if (!result.isSuccessful) {
-                _loginFormState.value =
-                    LoginFormState(emailError = result.message, passwordError = result.message)
+            when (val result = loginInteractor.login(email, password)) {
+                is NewResult.Success -> {
+                    _loginResult.value = Result(isSuccessful = true)
+                }
+
+                is NewResult.Error -> {
+                    _loginFormState.value = when (result.error) {
+                        is IncorrectCredentialsException -> LoginFormState(passwordError = "Incorrect password")
+                        is UserDoesNotExistException -> LoginFormState(emailError = "User doesn't exist")
+                    }
+                }
             }
-            _loginResult.value = result
+        }
+    }
+
+    private fun getEmailErrorMessage(email: String): String? {
+        when (val result = loginInteractor.validateEmail(email)) {
+            is NewResult.Success -> {
+                return null
+            }
+
+            is NewResult.Error -> {
+                return when (result.error) {
+                    is BlankEmailException -> {
+                        "Blank email"
+                    }
+
+                    is InvalidEmailException -> {
+                        "Invalid email format"
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getPassowrdErrorMessage(password: String): String? {
+        return when (val result = loginInteractor.validatePasswordLength(password)) {
+            is NewResult.Success -> {
+                null
+            }
+
+            is NewResult.Error -> {
+                "Password too short"
+            }
         }
     }
 }

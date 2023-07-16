@@ -5,7 +5,10 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.example.mytransactoins.data.util.Hasher
-import com.example.mytransactoins.domain.model.Result
+import com.example.mytransactoins.domain.interactor.login.IncorrectCredentialsException
+import com.example.mytransactoins.domain.interactor.login.LoginException
+import com.example.mytransactoins.domain.interactor.login.UserDoesNotExistException
+import com.example.mytransactoins.domain.model.NewResult
 import com.example.mytransactoins.domain.model.User
 import com.example.mytransactoins.domain.repo.UserRepo
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -48,16 +51,16 @@ class UserRepoImpl @Inject constructor(
     }
 
     // TODO change return type to Result<User>
-    override fun logIn(email: String, password: String): Result {
+    override fun logIn(email: String, password: String): NewResult<User, LoginException> {
         val savedHashedPassword = usersPreferences.getString(email, null)
-            ?: return Result(false, "User doesn't exists")
+            ?: return NewResult.Error(UserDoesNotExistException())
 
         if (hasher.verify(password, savedHashedPassword).not()) {
-            return Result(false, "Either email or password is incorrect")
+            return NewResult.Error(IncorrectCredentialsException())
         }
 
         currentUserPreferences.edit().putString(CURRENT_USER, email).apply()
-        return Result(true)
+        return NewResult.Success(User(email))
     }
 
     override fun logOut() {
