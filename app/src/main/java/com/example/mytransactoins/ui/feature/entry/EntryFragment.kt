@@ -26,11 +26,7 @@ class EntryFragment : Fragment(R.layout.fragment_entry) {
             findNavController().navigate(EntryFragmentDirections.actionEntryFragmentToLoginFragment())
         }
         binding.buttonRegister.setOnClickListener {
-            navigateToRegistration()
+            findNavController().navigate(EntryFragmentDirections.actionEntryFragmentToRegistrationActivity())
         }
-    }
-
-    private fun navigateToRegistration() {
-        findNavController().navigate(EntryFragmentDirections.actionEntryFragmentToRegistrationActivity())
     }
 }
