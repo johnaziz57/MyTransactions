@@ -1,7 +1,7 @@
 package com.example.mytransactoins.domain.interactor.login
 
 import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
-import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
+import com.example.mytransactoins.domain.interactor.common.ValidateEmailFormatInteractor
 import com.example.mytransactoins.domain.model.Result
 import com.example.mytransactoins.domain.model.User
 import com.example.mytransactoins.domain.repo.UserRepo
@@ -20,21 +20,25 @@ class LoginInteractorImplTest {
     private lateinit var userRepo: UserRepo
 
     @Mock
-    private lateinit var validateEmailInteractor: ValidateEmailInteractor
+    private lateinit var validateEmailFormatInteractor: ValidateEmailFormatInteractor
 
     private lateinit var loginInteractor: LoginInteractorImpl
 
     @Before
     fun setup() {
-        loginInteractor = LoginInteractorImpl(userRepo, validateEmailInteractor)
+        loginInteractor = LoginInteractorImpl(userRepo, validateEmailFormatInteractor)
     }
 
     @Test
     fun `test validateEmail`() {
         val validEmail = "j@e.com"
         val invalidEmail = "@e."
-        `when`(validateEmailInteractor.validateEmail(validEmail)).thenReturn(Result.Success(Unit))
-        `when`(validateEmailInteractor.validateEmail(invalidEmail)).thenReturn(
+        `when`(validateEmailFormatInteractor.validateEmail(validEmail)).thenReturn(
+            Result.Success(
+                Unit
+            )
+        )
+        `when`(validateEmailFormatInteractor.validateEmail(invalidEmail)).thenReturn(
             Result.Error(
                 InvalidEmailException()
             )

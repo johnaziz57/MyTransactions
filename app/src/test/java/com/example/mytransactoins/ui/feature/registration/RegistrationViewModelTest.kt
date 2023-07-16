@@ -2,7 +2,7 @@ package com.example.mytransactoins.ui.feature.registration
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
-import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
+import com.example.mytransactoins.domain.interactor.common.ValidateEmailFormatInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.EmailVerificationInteractor
@@ -30,7 +30,7 @@ class RegistrationViewModelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    private lateinit var validateEmailInteractor: ValidateEmailInteractor
+    private lateinit var validateEmailFormatInteractor: ValidateEmailFormatInteractor
 
     @Mock
     private lateinit var emailVerificationInteractor: EmailVerificationInteractor
@@ -49,7 +49,7 @@ class RegistrationViewModelTest {
     @Before
     fun setup() {
         viewModel = RegistrationViewModel(
-            validateEmailInteractor,
+            validateEmailFormatInteractor,
             emailVerificationInteractor,
             validateRegisterPasswordInteractor,
             registrationInteractor,
@@ -59,7 +59,11 @@ class RegistrationViewModelTest {
 
     @Test
     fun `test submit valid email`() {
-        `when`(validateEmailInteractor.validateEmail(anyString())).thenReturn(Result.Success(Unit))
+        `when`(validateEmailFormatInteractor.validateEmail(anyString())).thenReturn(
+            Result.Success(
+                Unit
+            )
+        )
         viewModel.submitEmail("j@e.com")
         val value = viewModel.validateEmailLiveData.getOrAwaitValue()
         assert(value.isSuccessful)
@@ -67,7 +71,7 @@ class RegistrationViewModelTest {
 
     @Test
     fun `test submit invalid email`() {
-        `when`(validateEmailInteractor.validateEmail(anyString())).thenReturn(
+        `when`(validateEmailFormatInteractor.validateEmail(anyString())).thenReturn(
             Result.Error(
                 InvalidEmailException()
             )

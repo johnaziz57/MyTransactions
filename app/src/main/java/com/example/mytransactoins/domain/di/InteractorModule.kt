@@ -1,7 +1,7 @@
 package com.example.mytransactoins.domain.di
 
-import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
-import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractorImpl
+import com.example.mytransactoins.domain.interactor.common.ValidateEmailFormatInteractor
+import com.example.mytransactoins.domain.interactor.common.ValidateEmailFormatInteractorImpl
 import com.example.mytransactoins.domain.interactor.entry.EntryInteractor
 import com.example.mytransactoins.domain.interactor.entry.EntryInteractorImpl
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
@@ -30,7 +30,7 @@ interface InteractorModule {
     fun bindLoginInteractor(loginInteractorImpl: LoginInteractorImpl): LoginInteractor
 
     @Binds
-    fun bindEmailInteractor(emailInteractorImpl: ValidateEmailInteractorImpl): ValidateEmailInteractor
+    fun bindEmailInteractor(emailInteractorImpl: ValidateEmailFormatInteractorImpl): ValidateEmailFormatInteractor
 
     @Binds
     fun bindPasswordInteractor(validatePasswordInteractorImpl: ValidateRegisterPasswordInteractorImpl): ValidateRegisterPasswordInteractor

@@ -4,7 +4,7 @@ import android.util.Patterns
 import com.example.mytransactoins.domain.model.Result
 import javax.inject.Inject
 
-class ValidateEmailInteractorImpl @Inject constructor() : ValidateEmailInteractor {
+class ValidateEmailFormatInteractorImpl @Inject constructor() : ValidateEmailFormatInteractor {
     override fun validateEmail(email: String): Result<Unit, ValidateEmailException> {
         if (email.isBlank()) {
             return Result.Error(BlankEmailException())

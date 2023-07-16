@@ -7,11 +7,11 @@ import org.junit.Test
  * ValidateEmailInteractor relies on Android.Pattern to match the email
  * This requires running the logic as part of AndroidTest.
  */
-internal class ValidateEmailInteractorImplTest {
+internal class ValidateEmailFormatInteractorImplTest {
 
     @Test
     fun testValidEmails() {
-        val validateEmailInteractor = ValidateEmailInteractorImpl()
+        val validateEmailInteractor = ValidateEmailFormatInteractorImpl()
         fun testValidEmail(email: String) {
             assert(validateEmailInteractor.validateEmail(email) is Result.Success)
         }
@@ -27,7 +27,7 @@ internal class ValidateEmailInteractorImplTest {
 
     @Test
     fun testInValidEmails() {
-        val validateEmailInteractor = ValidateEmailInteractorImpl()
+        val validateEmailInteractor = ValidateEmailFormatInteractorImpl()
         fun testInvalidEmail(email: String) {
             assert(validateEmailInteractor.validateEmail(email) is Result.Error)
         }

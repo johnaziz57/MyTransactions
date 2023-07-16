@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mytransactoins.domain.interactor.common.BlankEmailException
 import com.example.mytransactoins.domain.interactor.common.InvalidEmailException
-import com.example.mytransactoins.domain.interactor.common.ValidateEmailInteractor
+import com.example.mytransactoins.domain.interactor.common.ValidateEmailFormatInteractor
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.register.RegistrationInteractor
 import com.example.mytransactoins.domain.interactor.register.email_verification.CodeTooShortException
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-    private val validateEmailInteractor: ValidateEmailInteractor,
+    private val validateEmailFormatInteractor: ValidateEmailFormatInteractor,
     private val emailVerificationInteractor: EmailVerificationInteractor,
     private val validateRegisterPasswordInteractor: ValidateRegisterPasswordInteractor,
     private val registrationInteractor: RegistrationInteractor,
@@ -51,7 +51,7 @@ class RegistrationViewModel @Inject constructor(
     private var email: String = ""
 
     fun submitEmail(email: String) {
-        when (val result = validateEmailInteractor.validateEmail(email)) {
+        when (val result = validateEmailFormatInteractor.validateEmail(email)) {
             is Result.Success -> {
                 _validateEmail.value = LiveDataResult(isSuccessful = true)
             }
