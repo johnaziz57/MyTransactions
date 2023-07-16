@@ -16,7 +16,7 @@ import com.example.mytransactoins.domain.interactor.register.password_validation
 import com.example.mytransactoins.domain.interactor.register.password_validation.PasswordsDoNotMatchException
 import com.example.mytransactoins.domain.interactor.register.password_validation.ValidateRegisterPasswordInteractor
 import com.example.mytransactoins.domain.model.Result
-import com.example.mytransactoins.ui.feature.mode.UIResult
+import com.example.mytransactoins.ui.feature.mode.LiveDataResult
 import com.example.mytransactoins.ui.feature.registration.password.PasswordFormState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -29,18 +29,18 @@ class RegistrationViewModel @Inject constructor(
     private val registrationInteractor: RegistrationInteractor,
     private val loginInteractor: LoginInteractor
 ) : ViewModel() {
-    val validateEmailLiveData: LiveData<UIResult<Unit>>
+    val validateEmailLiveData: LiveData<LiveDataResult<Unit>>
         get() = _validateEmail
 
-    val validateEmailVerificationLiveData: LiveData<UIResult<Unit>>
+    val validateEmailVerificationLiveData: LiveData<LiveDataResult<Unit>>
         get() = _validateEmailVerification
 
     val validatePasswordLiveData: LiveData<PasswordFormState>
         get() = _validatePassword
 
 
-    private val _validateEmail = MutableLiveData<UIResult<Unit>>()
-    private val _validateEmailVerification = MutableLiveData<UIResult<Unit>>()
+    private val _validateEmail = MutableLiveData<LiveDataResult<Unit>>()
+    private val _validateEmailVerification = MutableLiveData<LiveDataResult<Unit>>()
     private val _validatePassword = MutableLiveData<PasswordFormState>()
 
     private var email: String = ""
@@ -48,19 +48,22 @@ class RegistrationViewModel @Inject constructor(
     fun submitEmail(email: String) {
         when (val result = validateEmailInteractor.validateEmail(email)) {
             is Result.Success -> {
-                _validateEmail.value = UIResult(isSuccessful = true)
+                _validateEmail.value = LiveDataResult(isSuccessful = true)
             }
 
             is Result.Error -> {
                 when (result.error) {
                     is BlankEmailException -> {
                         _validateEmail.value =
-                            UIResult(isSuccessful = false, errorMessage = "Blank email")
+                            LiveDataResult(isSuccessful = false, errorMessage = "Blank email")
                     }
 
                     is InvalidEmailException -> {
                         _validateEmail.value =
-                            UIResult(isSuccessful = false, errorMessage = "Invalid email format")
+                            LiveDataResult(
+                                isSuccessful = false,
+                                errorMessage = "Invalid email format"
+                            )
                     }
                 }
             }
@@ -70,15 +73,15 @@ class RegistrationViewModel @Inject constructor(
     fun submitEmailVerificationCode(code: String) {
         _validateEmailVerification.value = emailVerificationInteractor.validateCode(code).let {
             when (it) {
-                is Result.Success -> UIResult(isSuccessful = true)
+                is Result.Success -> LiveDataResult(isSuccessful = true)
                 is Result.Error -> {
                     when (it.error) {
-                        is CodeTooShortException -> UIResult(
+                        is CodeTooShortException -> LiveDataResult(
                             isSuccessful = false,
                             errorMessage = "Code too short"
                         )
 
-                        is IncorrectCodeException -> UIResult(
+                        is IncorrectCodeException -> LiveDataResult(
                             isSuccessful = false,
                             errorMessage = "Incorrect code"
                         )

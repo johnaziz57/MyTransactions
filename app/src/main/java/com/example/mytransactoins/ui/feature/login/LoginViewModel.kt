@@ -9,7 +9,7 @@ import com.example.mytransactoins.domain.interactor.login.IncorrectCredentialsEx
 import com.example.mytransactoins.domain.interactor.login.LoginInteractor
 import com.example.mytransactoins.domain.interactor.login.UserDoesNotExistException
 import com.example.mytransactoins.domain.model.Result
-import com.example.mytransactoins.ui.feature.mode.UIResult
+import com.example.mytransactoins.ui.feature.mode.LiveDataResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -19,11 +19,11 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
     val loginFormStateLiveData: LiveData<LoginFormState>
         get() = _loginFormState
-    val loginResultLiveData: LiveData<UIResult<Unit>>
+    val loginResultLiveData: LiveData<LiveDataResult<Unit>>
         get() = _loginResult
 
     private val _loginFormState = MutableLiveData<LoginFormState>()
-    private val _loginResult = MutableLiveData<UIResult<Unit>>()
+    private val _loginResult = MutableLiveData<LiveDataResult<Unit>>()
 
     fun login(email: String, password: String) {
         val emailError = validateEmail(email)
@@ -37,11 +37,11 @@ class LoginViewModel @Inject constructor(
         if (isValidInput) {
             when (val result = loginInteractor.login(email, password)) {
                 is Result.Success -> {
-                    _loginResult.value = UIResult(isSuccessful = true)
+                    _loginResult.value = LiveDataResult(isSuccessful = true)
                 }
 
                 is Result.Error -> {
-                    _loginResult.value = UIResult(isSuccessful = false)
+                    _loginResult.value = LiveDataResult(isSuccessful = false)
                     _loginFormState.value = when (result.error) {
                         is IncorrectCredentialsException -> LoginFormState(passwordError = "Incorrect password")
                         is UserDoesNotExistException -> LoginFormState(emailError = "User doesn't exist")
