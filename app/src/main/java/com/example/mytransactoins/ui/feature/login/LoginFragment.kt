@@ -25,7 +25,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             binding.loading.isVisible = false
             it.emailError.let { error -> binding.editTextEmail.error = error }
             it.passwordError.let { error -> binding.editTextPassword.error = error }
-            if (it.isValid) {
+        }
+
+        viewModel.loginResultLiveData.observe(viewLifecycleOwner) {
+            if (it.isSuccessful) {
                 findNavController().navigateToNewTaskActivity(LoginFragmentDirections.actionLoginFragmentToTransactionActivity())
             }
         }
