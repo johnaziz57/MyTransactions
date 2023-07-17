@@ -1,3 +1,7 @@
+# Update
+
+Mon 17/07 19:14, I have added one more thing to improve in the list of bugs and short comings
+
 ## Description
 
 This app is a demo to display dummy transactions to the user
@@ -121,6 +125,8 @@ The list of known bugs is:
 1. Trying to go back in the verification code screen to email submission screen doesn't work.
 2. Keyboard doesn't show up automatically when a text field is focused.
 3. Animation between activities could be better.
+4. No every error should be a child of an exception. Exception is used to be thrown when something
+un expected happens. I should have not made all the validation errors children of exceptions.
 
 ## TODO
 
